@@ -3,26 +3,28 @@ class KeywordPromptComposer:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "keyword": ("STRING", {"forceInput": True}),
-                "template_prompt": ("STRING", {
-                    "multiline": True,
-                    "default": "A picture of a goblin. <loc>"
-                }),
+                "text": ("STRING", {"multiline": True}),
+                "keyword": ("STRING", {"default": "item"}),
             }
         }
 
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("composed_prompt",)
     FUNCTION = "compose_prompt"
-    CATEGORY = "Text/Custom"
+    CATEGORY = "Pipemind/Text"
 
-    def compose_prompt(self, keyword, template_prompt):
-        if "=" not in keyword:
-            return (template_prompt,)
+    def compose_prompt(self, text, keyword):
+        if not text.strip():
+            return ("",)
 
-        key, value = keyword.split("=", 1)
-        key = key.strip()
-        value = value.strip()
+        # Remove angle brackets if present
+        keyword = keyword.strip().strip("<>")
 
-        result = template_prompt.replace(f"<{key}>", value)
-        return (result,)
+        for line in text.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith(f"{keyword}="):
+                return (line.split("=", 1)[1].strip(),)
+
+        return ("",)

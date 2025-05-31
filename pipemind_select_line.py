@@ -46,6 +46,9 @@ class SelectLineFromDropdown:
     CATEGORY = "Text/Custom"
 
     def get_select_line(self, file_name: str, line_index: int):
+        if line_index == 99:
+            return ("",)  # Soft disable: return empty line
+
         # Compute full path and read lines
         file_path = os.path.join(COMFY_INPUT_DIR, file_name)
         try:
