@@ -4,6 +4,7 @@ from .pipemind_prompt_combiner_node import SimplePromptCombiner
 from .pipemind_boolean_switch_any import BooleanSwitchAny
 from .pipemind_select_line import SelectLineFromDropdown
 from .pipemind_multiline_text import PipemindMultilineTextInput
+from .pipemind_flux_2m_aspect_ratio import PipemindFlux2MAspectRatio
 
 
 NODE_CLASS_MAPPINGS = {
@@ -13,6 +14,7 @@ NODE_CLASS_MAPPINGS = {
     "BooleanSwitchAny": BooleanSwitchAny,
     "SelectLineFromDropdown": SelectLineFromDropdown,
     "PipemindMultilineTextInput": PipemindMultilineTextInput,
+    "PipemindFlux2MAspectRatio": PipemindFlux2MAspectRatio,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -22,4 +24,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BooleanSwitchAny": "🧵 Boolean Switch (Any)",
     "SelectLineFromDropdown": "🧵 Select Line from TxT (Any)",
     "PipemindMultilineTextInput": "🧵 Multiline Text Input",
+    "PipemindFlux2MAspectRatio": "🧵 Flux 2M Aspect Ratios",
 }
