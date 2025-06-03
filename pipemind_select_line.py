@@ -1,6 +1,7 @@
-import os
 
-# Use ComfyUI's input folder as source for text files
+import os
+import random
+
 COMFY_INPUT_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..", "input")
 )
@@ -21,33 +22,44 @@ def list_txt_files_recursive(base_dir):
 
 
 class SelectLineFromDropdown:
+    def __init__(self):
+        self.current_index = 0
+
     @classmethod
     def INPUT_TYPES(cls):
-        # Build a dropdown of available .txt files
         files = list_txt_files_recursive(COMFY_INPUT_DIR)
         if not files:
             files = ["[No .txt files found]"]
         return {
             "required": {
-                # dropdown list of relative file paths
+                "enabled": ("BOOLEAN", {"default": True}),
                 "file_name": (files,),
-                # zero-based line index
+                "mode": (["manual", "random", "increment", "decrement"],),
                 "line_index": ("INT", {
                     "default": 0,
                     "min": 0,
                     "max": 1000000,
                 }),
+                "seed": ("INT", {
+                    "default": 0,
+                    "min": 0,
+                    "max": 0xffffffffffffffff
+                }),
             }
         }
 
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("selected_line",)
+    RETURN_TYPES = ("STRING", "INT", "INT")
+    RETURN_NAMES = ("selected_line", "line_count", "current_index")
     FUNCTION = "get_select_line"
     CATEGORY = "Text/Custom"
 
-    def get_select_line(self, file_name: str, line_index: int):
-        if line_index == 99:
-            return ("",)  # Soft disable: return empty line
+    @staticmethod
+    def IS_CHANGED():
+        return True
+
+    def get_select_line(self, enabled: bool, file_name: str, mode: str, line_index: int, seed: int):
+        if not enabled:
+            return ("", 0, 0)  # Soft disable: return empty line when disabled
 
         # Compute full path and read lines
         file_path = os.path.join(COMFY_INPUT_DIR, file_name)
@@ -55,11 +67,23 @@ class SelectLineFromDropdown:
             with open(file_path, "r", encoding="utf-8") as f:
                 # Strip out empty lines
                 lines = [ln.rstrip("\n") for ln in f if ln.strip()]
+
             if not lines:
-                return ("[Error: File is empty]",)
-            # Clamp index to valid range
-            idx = max(0, min(line_index, len(lines) - 1))
-            return (lines[idx],)
+                return ("[Error: File is empty]", 0, 0)
+
+            n = len(lines)
+
+            if mode == "random":
+                rng = random.Random(seed)
+                self.current_index = rng.randint(0, n - 1)
+            elif mode == "increment":
+                self.current_index = (self.current_index + 1) % n
+            elif mode == "decrement":
+                self.current_index = (self.current_index - 1) % n
+            else:  # manual mode
+                self.current_index = max(0, min(line_index, n - 1))
+
+            return (lines[self.current_index], n, self.current_index)
+
         except Exception as e:
-            return (f"[Error: {e}]",
-                    )
+            return (f"[Error: {e}]", 0, 0)
