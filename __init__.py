@@ -6,6 +6,7 @@ from .pipemind_select_line import SelectLineFromDropdown
 from .pipemind_multiline_text import PipemindMultilineTextInput
 from .pipemind_flux_2m_aspect_ratio import PipemindFlux2MAspectRatio
 from .pipemind_sdxl_aspect_ratio import PipemindSDXL15AspectRatio
+from .pipemind_room_mapper import PipemindRoomNode
 
 
 NODE_CLASS_MAPPINGS = {
@@ -17,6 +18,7 @@ NODE_CLASS_MAPPINGS = {
     "PipemindMultilineTextInput": PipemindMultilineTextInput,
     "PipemindFlux2MAspectRatio": PipemindFlux2MAspectRatio,
     "PipemindSDXL15AspectRatio": PipemindSDXL15AspectRatio,
+    "PipemindRoomNode": PipemindRoomNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -27,5 +29,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SelectLineFromDropdown": "🧵 Select Line from TxT (Any)",
     "PipemindMultilineTextInput": "🧵 Multiline Text Input",
     "PipemindFlux2MAspectRatio": "🧵 Flux 2M Aspect Ratios",
-    "PipemindSDXL15AspectRatio": "🧵 SDXL Aspect Ratios"
+    "PipemindSDXL15AspectRatio": "🧵 SDXL Aspect Ratios",
+    "PipemindRoomNode": "🧵 Room Mapper"
 }
