@@ -12,7 +12,7 @@ class BooleanSwitchAny:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("result",)
     FUNCTION = "switch"
-    CATEGORY = "comfyui-pipemind"
+    CATEGORY = "Pipemind/Switch"
 
     @classmethod
     def INPUT_IS_PREVIEW(cls):

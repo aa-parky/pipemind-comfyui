@@ -54,8 +54,8 @@ class SelectLineFromDropdown:
     CATEGORY = "Text/Custom"
 
     @staticmethod
-    def IS_CHANGED():
-        return True
+    def IS_CHANGED(enabled=True, **kwargs):
+        return enabled
 
     def get_select_line(self, enabled: bool, file_name: str, mode: str, line_index: int, seed: int):
         if not enabled:
