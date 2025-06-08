@@ -11,6 +11,7 @@ from .pipemind_image_saver_with_caption import  PipemindSaveImageWTxt
 from .pipemind_token_counter import PipemindTokenCounter
 from .pipemind_show_text import PipemindShowText
 from .pipemind_display_any import PipemindDisplayAny
+from .pipemind_lora_loader import PipemindLoraLoader
 
 
 NODE_CLASS_MAPPINGS = {
@@ -27,6 +28,7 @@ NODE_CLASS_MAPPINGS = {
     "PipemindTokenCounter": PipemindTokenCounter,
     "PipemindShowText": PipemindShowText,
     "PipemindDisplayAny": PipemindDisplayAny,
+    "PipemindLoraLoader": PipemindLoraLoader,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -43,6 +45,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PipemindTokenCounter": "🧵 Token Counter",
     "PipemindShowText": "🧵 Show Text",
     "PipemindDisplayAny": "🧵 Display Any",
+    "PipemindLoraLoader": "🧵 LoRA Loader",
 }
 
 WEB_DIRECTORY = "./web"
