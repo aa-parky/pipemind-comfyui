@@ -76,11 +76,6 @@ class PipemindSaveImageWTxt:
             # Create directory if it doesn't exist
             os.makedirs(full_path, exist_ok=True)
 
-            # Reset counter if this appears to be a new workflow
-            existing_count = self.count_existing_images(full_path, filename_prefix)
-            if PipemindSaveImageWTxt._image_counter == 0 and existing_count > 0:
-                print("DEBUG: Counter reset detected - new workflow starting")
-
             results = list()
             for image in images:
                 i = 255. * image.cpu().numpy()
