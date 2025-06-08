@@ -22,71 +22,89 @@ def create_empty_image():
     return torch.zeros((1, 3, 64, 64), dtype=torch.float32)
 
 
+def validate_image(image_path):
+    """Validate if the file is a valid image"""
+    try:
+        with Image.open(image_path) as img:
+            img.verify()
+        return True
+    except Exception:
+        print(f"Invalid or corrupted image: {image_path}")
+        return False
+
+
 class BatchImageLoad:
     def __init__(self):
         self.current_index = 0
+        self.image_files = []
+        self.total_files = 0
 
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                 "directory": ("STRING", {"default": ""}),
-                "mode": (["single", "sequential", "random"],),
+                "mode": (["single", "sequential"],),
                 "image_index": ("INT", {
                     "default": 0,
                     "min": 0,
                     "max": 1000000,
                 }),
-                "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "INT")
-    RETURN_NAMES = ("image", "image_count")
+    RETURN_TYPES = ("IMAGE", "INT", "INT")
+    RETURN_NAMES = ("image", "image_count", "current_index")
     FUNCTION = "load_image"
     CATEGORY = "image/Custom"
 
-    def load_image(self, directory: str, mode: str, image_index: int, seed: int):
+    def get_image_files(self, directory):
+        """Get list of valid image files from directory"""
+        image_files = []
+        allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
+
+        if os.path.isfile(directory):
+            if any(directory.lower().endswith(ext) for ext in allowed_extensions):
+                if validate_image(directory):
+                    image_files = [directory]
+        else:
+            for root, _, files in os.walk(directory):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    if any(file.lower().endswith(ext) for ext in allowed_extensions):
+                        if validate_image(file_path):
+                            image_files.append(file_path)
+
+        return sorted(image_files)
+
+    def load_image(self, directory: str, mode: str, image_index: int):
         try:
             # Handle directory path
             full_path = os.path.join(COMFY_INPUT_DIR, directory)
             if not os.path.exists(full_path):
                 print(f"Path does not exist: {full_path}")
-                return (create_empty_image(), 0)
+                return (create_empty_image(), 0, 0)
 
-            # Get list of image files
-            image_files = []
-            allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
-            if os.path.isfile(full_path):
-                if any(full_path.lower().endswith(ext) for ext in allowed_extensions):
-                    image_files = [full_path]
-            else:
-                for root, _, files in os.walk(full_path):
-                    for file in files:
-                        if any(file.lower().endswith(ext) for ext in allowed_extensions):
-                            image_files.append(os.path.join(root, file))
+            # Get and cache list of valid image files
+            if not self.image_files:
+                self.image_files = self.get_image_files(full_path)
+                self.total_files = len(self.image_files)
 
-            image_files.sort()
-            file_count = len(image_files)
-
-            if file_count == 0:
-                print("No images found")
-                return (create_empty_image(), 0)
+            if self.total_files == 0:
+                print("No valid images found")
+                return (create_empty_image(), 0, 0)
 
             # Select image based on mode
             if mode == "sequential":
-                self.current_index = (self.current_index + 1) % file_count
                 selected_index = self.current_index
-            elif mode == "random":
-                import random
-                random.seed(seed)
-                selected_index = random.randint(0, file_count - 1)
+                self.current_index = (self.current_index + 1) % self.total_files
             else:  # single mode
-                selected_index = min(image_index, file_count - 1)
+                selected_index = min(image_index, self.total_files - 1)
+                self.current_index = selected_index
 
             # Load and process image
-            image_path = image_files[selected_index]
-            print(f"Loading image: {image_path}")
+            image_path = self.image_files[selected_index]
+            print(f"Loading image {selected_index + 1}/{self.total_files}: {image_path}")
 
             image = Image.open(image_path)
             image = ImageOps.exif_transpose(image)  # Handle EXIF orientation
@@ -97,13 +115,13 @@ class BatchImageLoad:
             # Convert to tensor
             tensor_image = pil2tensor(image)
 
-            return (tensor_image, file_count)
+            return (tensor_image, self.total_files, selected_index)
 
         except Exception as e:
             print(f"Error loading image: {e}")
             import traceback
             traceback.print_exc()
-            return (create_empty_image(), 0)
+            return (create_empty_image(), 0, 0)
 
     @staticmethod
     def IS_CHANGED(**kwargs):
