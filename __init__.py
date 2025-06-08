@@ -7,6 +7,8 @@ from .pipemind_multiline_text import PipemindMultilineTextInput
 from .pipemind_flux_2m_aspect_ratio import PipemindFlux2MAspectRatio
 from .pipemind_sdxl_aspect_ratio import PipemindSDXL15AspectRatio
 from .pipemind_room_mapper import PipemindRoomNode
+from .pipemind_batch_image_loader import BatchImageLoad
+from .pipemind_image_saver_with_caption import  PipemindSaveImageWTxt
 
 
 NODE_CLASS_MAPPINGS = {
@@ -19,6 +21,8 @@ NODE_CLASS_MAPPINGS = {
     "PipemindFlux2MAspectRatio": PipemindFlux2MAspectRatio,
     "PipemindSDXL15AspectRatio": PipemindSDXL15AspectRatio,
     "PipemindRoomNode": PipemindRoomNode,
+    "BatchImageLoad": BatchImageLoad,
+    "PipemindSaveImageWTxt": PipemindSaveImageWTxt,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -30,5 +34,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PipemindMultilineTextInput": "🧵 Multiline Text Input",
     "PipemindFlux2MAspectRatio": "🧵 Flux 2M Aspect Ratios",
     "PipemindSDXL15AspectRatio": "🧵 SDXL Aspect Ratios",
-    "PipemindRoomNode": "🧵 Room Mapper"
+    "PipemindRoomNode": "🧵 Room Mapper",
+    "BatchImageLoad": "🧵 Batch Image Loader",
+    "PipemindSaveImageWTxt": "🧵 Save Image with Caption",
 }
