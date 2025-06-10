@@ -15,8 +15,6 @@ import folder_paths
 
 
 class PipemindSaveImageWTxt:
-    _image_counter = 0
-
     def __init__(self):
         self.type = "output"
         self.prefix_append = ""
@@ -58,7 +56,12 @@ class PipemindSaveImageWTxt:
         count = 0
         for filename in os.listdir(path):
             if filename.startswith(filename_prefix) and filename.endswith('.png'):
-                count += 1
+                try:
+                    # Extract the number from the filename
+                    number = int(filename.rsplit('_', 1)[1].split('.')[0])
+                    count = max(count, number + 1)
+                except (ValueError, IndexError):
+                    continue
         return count
 
     def save_images(self, images, output_path, filename_prefix="tag", prompt=None, extra_pnginfo=None, caption=None,
@@ -76,6 +79,9 @@ class PipemindSaveImageWTxt:
             # Create directory if it doesn't exist
             os.makedirs(full_path, exist_ok=True)
 
+            # Get the starting counter value based on existing files
+            counter = self.count_existing_images(full_path, filename_prefix)
+
             results = list()
             for image in images:
                 i = 255. * image.cpu().numpy()
@@ -91,7 +97,7 @@ class PipemindSaveImageWTxt:
                             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
                 # Create filenames
-                base_file_name = f"{filename_prefix}_{PipemindSaveImageWTxt._image_counter:05}"
+                base_file_name = f"{filename_prefix}_{counter:05}"
                 file = f"{base_file_name}.png"
                 file_path = os.path.join(full_path, file)
 
@@ -105,8 +111,8 @@ class PipemindSaveImageWTxt:
                     with open(txt_path, 'w', encoding='utf-8') as f:
                         f.write(caption)
 
-                print(f"Saved: {file} (counter: {PipemindSaveImageWTxt._image_counter})")
-                PipemindSaveImageWTxt._image_counter += 1
+                print(f"Saved: {file} (counter: {counter})")
+                counter += 1
 
                 results.append({
                     "filename": file,
