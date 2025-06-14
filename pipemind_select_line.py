@@ -51,7 +51,7 @@ class SelectLineFromDropdown:
     RETURN_TYPES = ("STRING", "INT", "INT")
     RETURN_NAMES = ("selected_line", "line_count", "current_index")
     FUNCTION = "get_select_line"
-    CATEGORY = "Text/Custom"
+    CATEGORY = "Pipemind/Custom"
 
     @staticmethod
     def IS_CHANGED(enabled=True, **kwargs):

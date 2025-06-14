@@ -38,7 +38,7 @@ class LoadTxtFile:
     RETURN_TYPES = ("STRING", "INT")
     RETURN_NAMES = ("file_content", "line_count")
     FUNCTION = "load_txt_file"
-    CATEGORY = "Text/Custom"
+    CATEGORY = "Pipemind/Custom"
 
     @staticmethod
     def IS_CHANGED(enabled=True, **kwargs):

@@ -220,7 +220,7 @@ class BatchImageLoad_output:
     FUNCTION = "load_image"
     
     # The category this node will appear in within the ComfyUI interface
-    CATEGORY = "image/Custom"
+    CATEGORY = "Pipemind"
 
     def get_image_files(self, directory):
         """

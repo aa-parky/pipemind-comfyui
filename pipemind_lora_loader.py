@@ -33,7 +33,7 @@ class PipemindLoraLoader:
 
     RETURN_TYPES = ("MODEL", "CLIP")
     FUNCTION = "load_loras"
-    CATEGORY = "utils"
+    CATEGORY = "Pipemind"
 
     def load_loras(self, model, clip, lora_01, strength_01, lora_02, strength_02,
                    lora_03, strength_03, lora_04, strength_04, lora_05, strength_05):

@@ -35,7 +35,7 @@ class RandomLineFromDropdown:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("random_line",)
     FUNCTION = "get_random_line"
-    CATEGORY = "Text/Custom"
+    CATEGORY = "Pipemind/Custom"
 
     def get_random_line(self, file_name, seed):
         random.seed(seed)

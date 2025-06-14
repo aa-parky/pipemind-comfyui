@@ -40,7 +40,7 @@ class PipemindDisplayAny:
     RETURN_TYPES = ()
     FUNCTION = "main"
     OUTPUT_NODE = True
-    CATEGORY = "utils"
+    CATEGORY = "Pipemind"
 
     def main(self, source=None, unique_id=None, extra_pnginfo=None):
         value = 'None'

@@ -17,7 +17,7 @@ class SimplePromptCombiner:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("combined_prompt",)
     FUNCTION = "combine"
-    CATEGORY = "comfyui-pipemind"
+    CATEGORY = "Pipemind"
 
     def combine(self, prompt_1, delimiter, prompt_2=None, prompt_3=None, prompt_4=None, prompt_5=None):
         prompts = [prompt_1, prompt_2, prompt_3, prompt_4, prompt_5]
