@@ -6,7 +6,7 @@ from .pipemind_select_line import SelectLineFromDropdown
 from .pipemind_multiline_text import PipemindMultilineTextInput
 from .pipemind_flux_2m_aspect_ratio import PipemindFlux2MAspectRatio
 from .pipemind_sdxl_aspect_ratio import PipemindSDXL15AspectRatio
-from .pipemind_batch_image_loader import BatchImageLoad
+from .pipemind_batch_image_loade_output import BatchImageLoad_output
 from .pipemind_image_saver_with_caption import  PipemindSaveImageWTxt
 from .pipemind_token_counter import PipemindTokenCounter
 from .pipemind_show_text import PipemindShowText
@@ -23,7 +23,7 @@ NODE_CLASS_MAPPINGS = {
     "PipemindMultilineTextInput": PipemindMultilineTextInput,
     "PipemindFlux2MAspectRatio": PipemindFlux2MAspectRatio,
     "PipemindSDXL15AspectRatio": PipemindSDXL15AspectRatio,
-    "BatchImageLoad": BatchImageLoad,
+    "BatchImageLoad": BatchImageLoad_output,
     "PipemindSaveImageWTxt": PipemindSaveImageWTxt,
     "PipemindTokenCounter": PipemindTokenCounter,
     "PipemindShowText": PipemindShowText,
@@ -41,7 +41,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PipemindMultilineTextInput": "🧵 Multiline Text Input",
     "PipemindFlux2MAspectRatio": "🧵 Flux 2M Aspect Ratios",
     "PipemindSDXL15AspectRatio": "🧵 SDXL Aspect Ratios",
-    "BatchImageLoad": "🧵 Batch Image Loader",
+    "BatchImageLoad": "🧵 Batch Image Loader src Output",
     "PipemindSaveImageWTxt": "🧵 Save Image with Caption",
     "PipemindTokenCounter": "🧵 Token Counter",
     "PipemindShowText": "🧵 Show Text",
