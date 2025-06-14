@@ -12,6 +12,7 @@ from .pipemind_token_counter import PipemindTokenCounter
 from .pipemind_show_text import PipemindShowText
 from .pipemind_display_any import PipemindDisplayAny
 from .pipemind_lora_loader import PipemindLoraLoader
+from .pipemind_load_txt_file import LoadTxtFile
 
 NODE_CLASS_MAPPINGS = {
     "RandomLineFromDropdown": RandomLineFromDropdown,
@@ -28,6 +29,7 @@ NODE_CLASS_MAPPINGS = {
     "PipemindShowText": PipemindShowText,
     "PipemindDisplayAny": PipemindDisplayAny,
     "PipemindLoraLoader": PipemindLoraLoader,
+    "LoadTxtFile": LoadTxtFile,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -45,6 +47,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "PipemindShowText": "🧵 Show Text",
     "PipemindDisplayAny": "🧵 Display Any",
     "PipemindLoraLoader": "🧵 LoRA Loader",
+    "LoadTxtFile": "🧵 Load TXT File",
 }
 
 WEB_DIRECTORY = "./web"
