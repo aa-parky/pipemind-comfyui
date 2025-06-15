@@ -22,6 +22,9 @@ def list_txt_files_recursive(base_dir):
 
 
 class SelectLineFromDropdown:
+    # Class variable to store state across instances
+    _batch_state = {}
+
     def __init__(self):
         self.current_index = 0
 
@@ -58,6 +61,9 @@ class SelectLineFromDropdown:
         return enabled
 
     def get_select_line(self, enabled: bool, file_name: str, mode: str, line_index: int, seed: int):
+        # Create a unique key for this file and mode combination
+        state_key = f"{file_name}_{mode}"
+
         if not enabled:
             return ("", 0, 0)  # Soft disable: return empty line when disabled
 
@@ -73,15 +79,48 @@ class SelectLineFromDropdown:
 
             n = len(lines)
 
+            state_key = f"{file_name}_{mode}"
+
             if mode == "random":
                 rng = random.Random(seed)
                 self.current_index = rng.randint(0, n - 1)
             elif mode == "increment":
-                self.current_index = (self.current_index + 1) % n
+                # Get the saved state or initialize with line_index
+                if state_key in self.__class__._batch_state:
+                    saved_index, saved_line_index = self.__class__._batch_state[state_key]
+
+                    # If line_index was changed by user, reset to that position
+                    if line_index != saved_line_index:
+                        self.current_index = max(0, min(line_index, n - 1))
+                    else:
+                        # Continue from last position and increment
+                        self.current_index = (saved_index + 1) % n
+                else:
+                    # First time with this combination, start at line_index
+                    self.current_index = max(0, min(line_index, n - 1))
+
+                # Save the current state for next batch
+                self.__class__._batch_state[state_key] = (self.current_index, line_index)
+
             elif mode == "decrement":
-                self.current_index = (self.current_index - 1) % n
+                # Similar logic for decrement
+                if state_key in self.__class__._batch_state:
+                    saved_index, saved_line_index = self.__class__._batch_state[state_key]
+
+                    if line_index != saved_line_index:
+                        self.current_index = max(0, min(line_index, n - 1))
+                    else:
+                        self.current_index = (saved_index - 1) % n
+                else:
+                    self.current_index = max(0, min(line_index, n - 1))
+
+                self.__class__._batch_state[state_key] = (self.current_index, line_index)
+
             else:  # manual mode
                 self.current_index = max(0, min(line_index, n - 1))
+                # Clear any saved state for this file in manual mode
+                if state_key in self.__class__._batch_state:
+                    del self.__class__._batch_state[state_key]
 
             return (lines[self.current_index], n, self.current_index)
 
