@@ -151,7 +151,7 @@ def list_image_directories(base_dir):
     return result
 
 
-class BatchImageLoad_output:
+class BatchImageLoadOutput:
     """
     ComfyUI custom node for loading images in batch from directories.
     
