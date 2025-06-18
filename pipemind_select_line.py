@@ -103,6 +103,9 @@ class SelectLineFromDropdown:
     # Category in the ComfyUI node browser
     CATEGORY = "Pipemind/Custom"
 
+    # JavaScript file for UI customization
+    JAVASCRIPT_FILE = "web/js/pipemind_selectLine.js"
+
     @staticmethod
     def IS_CHANGED(enabled=True, **kwargs):
         """
