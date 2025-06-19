@@ -2,6 +2,7 @@
 # Standard library imports
 import os
 import random
+import re
 
 # Define the path to ComfyUI's input directory
 # This uses relative paths to locate the 'input' folder from the current script location
@@ -22,6 +23,49 @@ def list_txt_files_recursive(base_dir):
                 rel_path = os.path.relpath(full_path, base_dir)
                 txt_files.append(rel_path)
     return sorted(txt_files)
+
+def parse_custom_indices(indices_str):
+    """
+    Parse a string of comma-separated indices into a list of integers.
+    Supports ranges like "1-5" and "10-15" as well as individual indices.
+
+    Args:
+        indices_str (str): String of comma-separated indices/ranges (e.g., "1,3,5-8,10")
+
+    Returns:
+        list: List of integer indices
+    """
+    if not indices_str.strip():
+        return []
+
+    result = []
+    parts = indices_str.split(',')
+
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+
+        # Check if it's a range (e.g., "5-10")
+        if '-' in part:
+            try:
+                start, end = map(int, part.split('-', 1))
+                # Ensure start <= end
+                if start <= end:
+                    result.extend(range(start, end + 1))
+            except ValueError:
+                # If conversion fails, skip this part
+                continue
+        else:
+            # Single number
+            try:
+                result.append(int(part))
+            except ValueError:
+                # If conversion fails, skip this part
+                continue
+
+    return result
+
 
 
 class SelectLineFromDropdown:
@@ -73,7 +117,7 @@ class SelectLineFromDropdown:
                 "file_name": (files,),
 
                 # Selection mode
-                "mode": (["manual", "random", "increment", "decrement"],),
+                "mode": (["manual", "random", "increment", "decrement", "custom_seq", "custom_random"],),
 
                 # Starting line index for selection
                 "line_index": ("INT", {
@@ -87,6 +131,12 @@ class SelectLineFromDropdown:
                     "default": 0,
                     "min": 0,
                     "max": 0xffffffffffffffff  # Max 64-bit unsigned int
+                }),
+
+                # Custom indices as comma-separated string (e.g., "12,18,78,91")
+                "custom_indices": ("STRING", {
+                    "default": "",
+                    "multiline": False
                 }),
             }
         }
@@ -123,7 +173,7 @@ class SelectLineFromDropdown:
         """
         return enabled
 
-    def get_select_line(self, enabled: bool, file_name: str, mode: str, line_index: int, seed: int):
+    def get_select_line(self, enabled: bool, file_name: str, mode: str, line_index: int, seed: int, custom_indices: str):
         """
         Main processing function that selects a line from the specified text file.
 
@@ -167,8 +217,52 @@ class SelectLineFromDropdown:
             # Store the number of lines for convenience
             n = len(lines)
 
+            # Parse custom indices if provided
+            custom_idx_list = []
+            if custom_indices and (mode == "custom_seq" or mode == "custom_random"):
+                # Parse the custom indices string using the helper function
+                parsed_indices = parse_custom_indices(custom_indices)
+                # Filter indices to only those within valid range for the file
+                custom_idx_list = [idx for idx in parsed_indices if 0 <= idx < n]
+
+                if not custom_idx_list:
+                    return (f"[Error: No valid indices in custom sequence. File has {n} lines.]", n, 0)
+
+            # CUSTOM SEQUENCE MODE: Iterate through custom indices
+            if mode == "custom_seq":
+                if not custom_idx_list:
+                    return ("[Error: No custom indices provided]", n, 0)
+
+                # Key for storing state specific to this sequence
+                seq_key = f"{file_name}_{mode}_{custom_indices}"
+
+                if seq_key in self.__class__._batch_state:
+                    # Get the position in the sequence, not the line index itself
+                    seq_pos, _ = self.__class__._batch_state[seq_key]
+                    # Move to next position in sequence
+                    next_pos = (seq_pos + 1) % len(custom_idx_list)
+                    # Get the actual line index from the custom sequence
+                    self.current_index = custom_idx_list[next_pos]
+                    # Store position in sequence, not the line index
+                    self.__class__._batch_state[seq_key] = (next_pos, custom_indices)
+                else:
+                    # Start at the first index in the sequence
+                    self.current_index = custom_idx_list[0]
+                    # Store position 0 in the sequence
+                    self.__class__._batch_state[seq_key] = (0, custom_indices)
+
+            # CUSTOM RANDOM MODE: Randomly select from custom indices
+            elif mode == "custom_random":
+                if not custom_idx_list:
+                    return ("[Error: No custom indices provided]", n, 0)
+
+                # Use the seed for consistent random selection
+                rng = random.Random(seed)
+                # Select a random index from the custom list
+                self.current_index = rng.choice(custom_idx_list)
+
             # RANDOM MODE: Select a random line based on the seed
-            if mode == "random":
+            elif mode == "random":
                 # Create a random number generator with the provided seed
                 # This ensures consistent results for the same seed
                 rng = random.Random(seed)
