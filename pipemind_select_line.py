@@ -1,3 +1,4 @@
+
 # pipemind_select_line.py
 # -----------------------------------------------------------------------------
 # SelectLineFromDropdown – ComfyUI custom node
@@ -56,6 +57,16 @@ def parse_custom_indices(indices: str) -> List[int]:
             except ValueError:
                 continue
     return out
+
+
+def add_line_numbers(lines: List[str]) -> str:
+    """Add line numbers starting from 0 to the text content."""
+    if not lines:
+        return ""
+    # Calculate the width needed for line numbers based on the total number of lines
+    width = len(str(len(lines) - 1))
+    # Format each line with its number, aligned properly
+    return "\n".join(f"{i:>{width}}: {line}" for i, line in enumerate(lines))
 
 
 # -----------------------------------------------------------------------------
@@ -131,7 +142,8 @@ class SelectLineFromDropdown:
             return "[Error: File is empty]", 0, 0, ""
 
         n = len(lines)
-        full_text = "\n".join(lines)
+        # Create numbered version of the full text
+        full_text = add_line_numbers(lines)
 
         # ---------------------- select index ------------------------------- #
         state_key = f"{file_name}_{mode}"
