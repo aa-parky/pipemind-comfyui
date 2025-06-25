@@ -3,8 +3,11 @@ class KeywordPromptComposer:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": ("STRING", {"multiline": True}),
-                "keyword": ("STRING", {"default": "item"}),
+                "prompt_template": ("STRING", {
+                    "multiline": True,
+                    "default": "A beautiful portrait of a person wearing <clothing>."
+                }),
+                "keyword_data": ("STRING", {"forceInput": True}),
             }
         }
 
@@ -13,18 +16,29 @@ class KeywordPromptComposer:
     FUNCTION = "compose_prompt"
     CATEGORY = "Pipemind/Text"
 
-    def compose_prompt(self, text, keyword):
-        if not text.strip():
-            return ("",)
+    def compose_prompt(self, prompt_template, keyword_data):
+        """
+        Replaces a placeholder in the template with a value from keyword_data.
 
-        # Remove angle brackets if present
-        keyword = keyword.strip().strip("<>")
+        Args:
+            prompt_template (str): The text containing a placeholder, e.g., "wearing <clothing>".
+            keyword_data (str): A string in "key=value" format, e.g., "clothing=red shirt".
+        """
+        # If keyword_data does not contain '=', we cannot find a key-value pair.
+        if "=" not in keyword_data:
+            # Return the template unmodified to avoid breaking the workflow.
+            return (prompt_template,)
 
-        for line in text.splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            if line.startswith(f"{keyword}="):
-                return (line.split("=", 1)[1].strip(),)
+        # Split the data into key and value.
+        key, value = keyword_data.split("=", 1)
+        key = key.strip()
+        value = value.strip()
 
-        return ("",)
+        # Create the placeholder string to search for, e.g., "<clothing>".
+        placeholder = f"<{key}>"
+
+        # Replace the placeholder in the template with the value.
+        composed_prompt = prompt_template.replace(placeholder, value)
+
+        return (composed_prompt,)
+
