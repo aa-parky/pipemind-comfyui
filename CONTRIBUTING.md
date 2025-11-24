@@ -172,6 +172,76 @@ class PipemindYourNode:
         pass
 ```
 
+### Testing
+
+**All new nodes and features should include tests.**
+
+#### Writing Tests
+
+1. **Create test file** in `tests/nodes/test_your_node.py`
+2. **Use validation helpers** from `conftest.py`
+3. **Mark tests appropriately** with pytest markers
+4. **Test edge cases** and error conditions
+
+#### Test Structure Example
+
+```python
+import pytest
+from pipemind_your_node import PipemindYourNode
+from tests.conftest import validate_node_structure, validate_node_outputs
+
+class TestPipemindYourNode:
+    """Test suite for PipemindYourNode."""
+
+    @pytest.fixture
+    def node(self):
+        """Create a node instance for testing."""
+        return PipemindYourNode()
+
+    @pytest.mark.unit
+    def test_node_structure(self):
+        """Test that the node has correct structure."""
+        validate_node_structure(PipemindYourNode)
+
+    @pytest.mark.unit
+    def test_basic_functionality(self, node):
+        """Test basic node functionality."""
+        result = node.your_function(param="value")
+        assert result is not None
+        validate_node_outputs(PipemindYourNode, result)
+
+    @pytest.mark.smoke
+    def test_smoke(self, node):
+        """Quick smoke test."""
+        result = node.your_function(param="test")
+        assert len(result) == 2  # Expected number of outputs
+```
+
+#### Running Tests
+
+```bash
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Run all tests
+pytest
+
+# Run your new tests
+pytest tests/nodes/test_your_node.py
+
+# Run with coverage
+pytest --cov=. --cov-report=term
+```
+
+#### Test Requirements
+
+- All tests must pass before submitting PR
+- Aim for >80% code coverage on new code
+- Include both positive and negative test cases
+- Test edge cases (empty inputs, None values, etc.)
+
+See [tests/README.md](tests/README.md) for detailed testing documentation.
+
 ## 📝 Submitting Changes
 
 ### Pull Request Guidelines

@@ -11,6 +11,7 @@ A focused collection of custom nodes for ComfyUI, designed for efficient workflo
 - [Installation](#installation)
 - [Node Categories](#node-categories)
 - [Requirements](#requirements)
+- [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -195,6 +196,39 @@ https://github.com/aa-parky/pipemind-comfyui
   - transformers >= 4.30.0
   - PyTorch (provided by ComfyUI)
   - NumPy (provided by ComfyUI)
+
+## 🧪 Testing
+
+This project includes a comprehensive test suite to ensure reliability and quality.
+
+### Running Tests
+
+```bash
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run all tests
+pytest
+
+# Run with coverage report
+pytest --cov=. --cov-report=html
+
+# Run specific test categories
+pytest -m unit        # Unit tests only
+pytest -m smoke       # Quick smoke tests
+pytest -m aspect_ratio # Aspect ratio node tests
+```
+
+### Test Categories
+
+Tests are organized using markers:
+- `unit` - Unit tests for individual functions
+- `integration` - Integration tests with ComfyUI
+- `smoke` - Quick validation tests
+- `slow` - Longer-running tests
+- Category-specific: `aspect_ratio`, `text`, `image`, `prompt`, `utility`
+
+For detailed testing documentation, see [tests/README.md](tests/README.md).
 
 ## 🤝 Contributing
 

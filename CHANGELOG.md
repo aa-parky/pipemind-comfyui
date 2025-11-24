@@ -8,11 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive README documentation
-- MIT License
-- Requirements.txt for dependency management
-- Contributing guidelines
-- GitHub issue and PR templates
+- Comprehensive test suite with pytest
+  - Unit tests for aspect ratio nodes
+  - Unit tests for utility nodes (Boolean switch)
+  - Unit tests for text processing nodes (Random line)
+  - Test fixtures and validation helpers
+  - pytest configuration and markers
+  - Test documentation in tests/README.md
+- Development dependencies (requirements-dev.txt)
+  - pytest and pytest plugins
+  - Code quality tools (black, flake8, pylint, mypy)
+  - Development tools (ipython, pre-commit)
+- Testing documentation in README.md and CONTRIBUTING.md
+- Development branch for ongoing work
+
+### Changed
+- Updated README with testing section
+- Updated CONTRIBUTING with testing guidelines
 
 ## [0.2.0] - 2025-11-24
 
