@@ -1,0 +1,184 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [ master, develop ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Check PR title format
+      run: |
+        PR_TITLE="${{ github.event.pull_request.title }}"
+
+        # Check if title starts with conventional commit type
+        if [[ "$PR_TITLE" =~ ^(Add|Fix|Update|Docs|Refactor|Test|Chore|Style|Perf|CI):\ .+ ]]; then
+          echo "✓ PR title follows format: $PR_TITLE"
+        else
+          echo "❌ PR title should start with: Add|Fix|Update|Docs|Refactor|Test|Chore|Style|Perf|CI: "
+          echo "   Example: 'Add: New aspect ratio node for Model X'"
+          echo "   Your title: $PR_TITLE"
+          exit 1
+        fi
+
+    - name: Check for CHANGELOG update
+      run: |
+        # Skip this check for documentation-only PRs
+        if [[ "${{ github.event.pull_request.title }}" =~ ^Docs: ]]; then
+          echo "✓ Docs-only PR, skipping CHANGELOG check"
+          exit 0
+        fi
+
+        # Check if CHANGELOG.md was modified
+        git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q "CHANGELOG.md"
+
+        if [ $? -eq 0 ]; then
+          echo "✓ CHANGELOG.md has been updated"
+        else
+          echo "⚠️  Warning: CHANGELOG.md was not updated"
+          echo "   Consider adding an entry describing your changes"
+        fi
+
+    - name: Check file sizes
+      run: |
+        # Check for large files (over 1MB)
+        LARGE_FILES=$(find . -type f -size +1M -not -path "./.git/*" -not -path "./.venv/*" -not -path "./venv/*")
+
+        if [ -n "$LARGE_FILES" ]; then
+          echo "⚠️  Warning: Large files detected:"
+          echo "$LARGE_FILES"
+          echo "   Consider if these files should be tracked with Git LFS"
+        else
+          echo "✓ No large files detected"
+        fi
+
+    - name: Check for debug code
+      run: |
+        # Check for common debug statements
+        DEBUG_PATTERNS="print\(|console\.log|debugger|pdb\.set_trace|breakpoint\(\)"
+
+        if grep -r -n -E "$DEBUG_PATTERNS" --include="*.py" --exclude-dir=".git" --exclude-dir="tests" --exclude-dir=".venv" --exclude-dir="venv" .; then
+          echo "⚠️  Warning: Found potential debug code (this is not a failure, just a reminder)"
+          echo "   Review the matches above and remove if not needed"
+        else
+          echo "✓ No obvious debug code found"
+        fi
+
+  check-node-structure:
+    name: Validate Node Structure
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Check node registrations
+      run: |
+        python << 'EOF'
+        import __init__
+
+        # Check that all registered nodes exist
+        print(f"Found {len(__init__.NODE_CLASS_MAPPINGS)} registered nodes")
+
+        missing = []
+        for name, cls in __init__.NODE_CLASS_MAPPINGS.items():
+            # Check required attributes
+            required_attrs = ['INPUT_TYPES', 'RETURN_TYPES', 'FUNCTION', 'CATEGORY']
+            for attr in required_attrs:
+                if not hasattr(cls, attr):
+                    missing.append(f"{name}: missing {attr}")
+
+        if missing:
+            print("❌ Node structure issues:")
+            for issue in missing:
+                print(f"   {issue}")
+            exit(1)
+        else:
+            print("✓ All nodes have required attributes")
+
+        # Check display name mappings match
+        if len(__init__.NODE_CLASS_MAPPINGS) != len(__init__.NODE_DISPLAY_NAME_MAPPINGS):
+            print(f"⚠️  Warning: {len(__init__.NODE_CLASS_MAPPINGS)} nodes but {len(__init__.NODE_DISPLAY_NAME_MAPPINGS)} display names")
+        else:
+            print("✓ Node mappings and display names match")
+        EOF
+
+  size-report:
+    name: PR Size Report
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Calculate PR size
+      run: |
+        # Get stats
+        ADDITIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= insertion)')
+        DELETIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= deletion)')
+        FILES_CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | wc -l)
+
+        # Default to 0 if empty
+        ADDITIONS=${ADDITIONS:-0}
+        DELETIONS=${DELETIONS:-0}
+
+        # Calculate size category
+        TOTAL_CHANGES=$((ADDITIONS + DELETIONS))
+
+        if [ $TOTAL_CHANGES -lt 100 ]; then
+          SIZE="XS"
+          EMOJI="🟢"
+        elif [ $TOTAL_CHANGES -lt 300 ]; then
+          SIZE="S"
+          EMOJI="🟢"
+        elif [ $TOTAL_CHANGES -lt 500 ]; then
+          SIZE="M"
+          EMOJI="🟡"
+        elif [ $TOTAL_CHANGES -lt 1000 ]; then
+          SIZE="L"
+          EMOJI="🟠"
+        else
+          SIZE="XL"
+          EMOJI="🔴"
+        fi
+
+        # Create summary
+        cat << EOF >> $GITHUB_STEP_SUMMARY
+        # $EMOJI PR Size: $SIZE
+
+        ## Changes Summary
+        - **Files Changed:** $FILES_CHANGED
+        - **Additions:** +$ADDITIONS
+        - **Deletions:** -$DELETIONS
+        - **Total Changes:** $TOTAL_CHANGES lines
+
+        ## Size Guidelines
+        - XS/S (< 300 lines): Easy to review ✅
+        - M (300-500 lines): Moderate review time
+        - L (500-1000 lines): Consider splitting if possible
+        - XL (> 1000 lines): Should likely be split into smaller PRs
+
+        EOF
+
+        echo "✓ PR size: $SIZE ($TOTAL_CHANGES lines changed)"

@@ -4,6 +4,9 @@ A focused collection of custom nodes for ComfyUI, designed for efficient workflo
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://github.com/aa-parky/pipemind-comfyui/actions/workflows/tests.yml/badge.svg)](https://github.com/aa-parky/pipemind-comfyui/actions/workflows/tests.yml)
+[![Code Quality](https://github.com/aa-parky/pipemind-comfyui/actions/workflows/code-quality.yml/badge.svg)](https://github.com/aa-parky/pipemind-comfyui/actions/workflows/code-quality.yml)
+[![codecov](https://codecov.io/gh/aa-parky/pipemind-comfyui/branch/master/graph/badge.svg)](https://codecov.io/gh/aa-parky/pipemind-comfyui)
 
 ## 📋 Table of Contents
 

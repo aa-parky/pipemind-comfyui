@@ -8,23 +8,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Comprehensive test suite with pytest
-  - Unit tests for aspect ratio nodes
-  - Unit tests for utility nodes (Boolean switch)
-  - Unit tests for text processing nodes (Random line)
+- **CI/CD Infrastructure with GitHub Actions**
+  - Test automation workflow (tests.yml)
+    * Runs unit and smoke tests on Python 3.12
+    * Coverage reporting with Codecov integration
+    * Installation validation
+  - Code quality workflow (code-quality.yml)
+    * Linting with Flake8
+    * Formatting checks with Black
+    * Type checking with mypy
+    * Security scanning with Bandit
+    * Dependency vulnerability checks
+  - PR validation workflow (pr-validation.yml)
+    * PR title format validation
+    * CHANGELOG update checks
+    * Node structure validation
+    * PR size reporting
+  - Release automation workflow (release.yml)
+    * Automated GitHub releases from tags
+    * Changelog extraction
+    * Release installation testing
+  - CI status badges in README.md
+  - Workflow documentation (.github/workflows/README.md)
+
+- **Testing Infrastructure**
+  - Comprehensive test suite with pytest
+  - Unit tests for aspect ratio nodes (14 tests)
+  - Unit tests for utility nodes (12 tests)
+  - Unit tests for text processing nodes (10 tests)
   - Test fixtures and validation helpers
   - pytest configuration and markers
   - Test documentation in tests/README.md
-- Development dependencies (requirements-dev.txt)
-  - pytest and pytest plugins
+
+- **Development Tools**
+  - Development dependencies (requirements-dev.txt)
+  - pytest and pytest plugins (cov, mock, xdist)
   - Code quality tools (black, flake8, pylint, mypy)
-  - Development tools (ipython, pre-commit)
-- Testing documentation in README.md and CONTRIBUTING.md
-- Development branch for ongoing work
+  - Development utilities (ipython, pre-commit)
 
 ### Changed
-- Updated README with testing section
-- Updated CONTRIBUTING with testing guidelines
+- Updated README with testing section and CI badges
+- Updated CONTRIBUTING with testing and CI guidelines
 
 ## [0.2.0] - 2025-11-24
 
