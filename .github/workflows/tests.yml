@@ -1,0 +1,122 @@
+name: Tests
+
+on:
+  push:
+    branches: [ master, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
+  pull_request:
+    branches: [ master, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Run unit tests
+      run: |
+        pytest tests/ -v --tb=short -m "unit or smoke" --junitxml=junit/test-results.xml
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: pytest-results-${{ matrix.python-version }}
+        path: junit/test-results.xml
+
+  test-with-coverage:
+    name: Test with Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ --cov=. --cov-report=xml --cov-report=term -m "unit or smoke"
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      if: always()
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report
+        path: coverage.xml
+
+  test-installation:
+    name: Test Installation
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: 'pip'
+
+    - name: Test basic installation
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Verify imports
+      run: |
+        python -c "from pipemind_qwen_aspect_ratio import PipemindQwenAspectRatio; print('✓ Qwen import successful')"
+        python -c "from pipemind_boolean_switch_any import BooleanSwitchAny; print('✓ Boolean switch import successful')"
+        python -c "from pipemind_random_line import RandomLineFromDropdown; print('✓ Random line import successful')"
+
+    - name: Test __init__ imports
+      run: |
+        python -c "import __init__; print(f'✓ Found {len(__init__.NODE_CLASS_MAPPINGS)} nodes'); assert len(__init__.NODE_CLASS_MAPPINGS) > 0"
