@@ -1,0 +1,10 @@
+# Pipemind ComfyUI Custom Nodes
+# Python 3.12.12+
+
+# Core dependencies (beyond ComfyUI)
+Pillow>=10.0.0
+transformers>=4.30.0
+
+# Note: The following are typically provided by ComfyUI/PyTorch installation
+# torch>=2.0.0
+# numpy>=1.24.0
