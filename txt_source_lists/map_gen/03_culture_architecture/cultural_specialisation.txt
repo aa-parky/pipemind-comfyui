@@ -1,0 +1,12 @@
+specialty=renowned for master craftsmanship and artisan guilds
+specialty=sustained by vast fungal farms and bio-organic agriculture
+specialty=known for arcane research and magical experimentation
+specialty=driven by trade caravans and bustling markets
+specialty=home to expert navigators and mapmakers
+specialty=focused on mining rare minerals from dangerous depths
+specialty=built around sacred rituals and spiritual guardians
+specialty=obsessed with mechanical inventions and unstable contraptions
+specialty=acting as a military stronghold with rigid discipline
+specialty=serving as a covert hub for smugglers and shadow dealings
+specialty=devoted to preserving ancient knowledge and libraries
+specialty=functioning as a pilgrimage site for distant travellers

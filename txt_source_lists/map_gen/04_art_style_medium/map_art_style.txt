@@ -1,0 +1,6 @@
+ma=An antique, hand-drawn fantasy map, in the style of a detailed ink and pencil sketch on aged parchment paper.
+ma=in the style of a colorful, hand-painted watercolor map.
+ma=in the style of a burnt-edge pirate treasure map with sea monsters.
+ma=in the style of a precise, minimalist, modern subway map.
+ma=in the style of a medieval illuminated manuscript with gold leaf.
+ma=in the style of a blueprint or technical schematic.

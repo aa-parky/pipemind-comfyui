@@ -1,0 +1,10 @@
+intent=presented as an explorer’s field survey with rough annotations
+intent=rendered as a royal cartographer’s immaculate reference map
+intent=designed as a magical navigator’s chart with arcane markings
+intent=illustrated as a travel route map showing ancient pathways
+intent=recorded as a scholar’s archival document stored in great libraries
+intent=depicted as a weathered treasure map with cryptic symbols
+intent=produced as a military reconnaissance sketch for strategic planning
+intent=displayed as a starfarer’s astral map aligning land with celestial bodies
+intent=styled as a diplomatic boundary chart marking contested zones
+intent=created as an apprentice cartographer’s imperfect but earnest draft

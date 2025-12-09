@@ -1,0 +1,11 @@
+mood=peaceful and pastoral
+mood=harsh and windswept
+mood=ominous and foreboding
+mood=enchanted and dreamlike
+mood=ruined and reclaimed by nature
+mood=chaotic and war-torn
+mood=quiet and contemplative
+mood=glowing and otherworldly
+mood=storm-battered and resilient
+mood=ancient and dignified
+mood=shadowed and secretive
