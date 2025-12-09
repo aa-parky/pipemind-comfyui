@@ -1,0 +1,12 @@
+theme=fantasy-medieval with folkloric influences
+theme=high-magic civilisation with ritual traditions
+theme=post-apocalyptic culture rebuilding from remnants
+theme=dystopian enclave ruled by strict order
+theme=steampunk-inspired society powered by odd machinery
+theme=goblin-centric culture valuing tinkering and chaos
+theme=elven-derived aesthetics built around harmony and growth
+theme=dwarven-influenced craftsmanship and subterranean order
+theme=techno-mystical civilisation fusing magic and devices
+theme=nomadic culture shaped by constant movement
+theme=tribal society structured around nature spirits
+theme=astral-themed society guided by celestial patterns

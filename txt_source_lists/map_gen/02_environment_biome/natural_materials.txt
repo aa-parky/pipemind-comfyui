@@ -1,0 +1,10 @@
+material=stone, granite, and carved masonry
+material=crystal, quartz, and refractive mineral structures
+material=bamboo, wood, and woven plant fibres
+material=ice blocks and frozen bone frames
+material=basalt, obsidian, and volcanic glass
+material=coral, shell, and ocean-grown structures
+material=bioluminescent fungi and natural chitin
+material=marble, polished stone, and gilded metal
+material=weathered driftwood and salt-worn timbers
+material=dune stone and sand-carved pillars

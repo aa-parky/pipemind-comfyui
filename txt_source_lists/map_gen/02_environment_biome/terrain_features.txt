@@ -1,0 +1,15 @@
+terrain=basalt cliffs and magma channels
+terrain=vine-smothered rocky outcrops and collapsed ground patterns
+terrain=tidal inlets with natural rock pillars and narrow channels
+terrain=crystal caverns with refractive mineral walls
+terrain=sea caves with branching tunnel networks
+terrain=mountain ledges clinging to steep rock faces
+terrain=underground mushroom forests shimmering with bioluminescence
+terrain=eroded stone ridges half-buried beneath shifting dunes
+terrain=giant canyon walls shaped by ancient winds
+terrain=mist-draped paths threading across low marshes
+terrain=glowing fungal groves and bioluminescent pools
+terrain=crater fields created by celestial impacts
+terrain=naturally stepped hillsides forming terrace-like ridges
+terrain=floating island chains suspended in sky currents
+terrain=reef formations shaped like spirals and towers

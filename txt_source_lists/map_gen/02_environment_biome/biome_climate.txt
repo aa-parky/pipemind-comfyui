@@ -1,0 +1,16 @@
+biome=forest glades and ancient woods
+biome=frozen tundra and arctic plains
+biome=marshlands and mist-covered swamps
+biome=deep jungles and overgrown wilderness
+biome=volcanic landscapes and basalt fields
+biome=coastal shores and windswept beaches
+biome=mountain highlands and rocky cliffs
+biome=underground caverns and deep earth chambers
+biome=desert dunes and arid canyons
+biome=coral reef shallows and oceanic outcrops
+biome=twilight biomes under perpetual dim skies
+biome=meteor-scarred wasteland plains
+biome=rolling vineyards and fertile farmland
+biome=wide open grasslands and nomadic plains
+biome=misty moorlands and fog-washed hills
+biome=lunar plains under low gravity and silver light
