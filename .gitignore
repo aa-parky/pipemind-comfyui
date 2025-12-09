@@ -11,3 +11,6 @@ __pycache__/
 *.py[cod]
 *.so
 /.python-version
+
+# OSX
+.DS_Store
