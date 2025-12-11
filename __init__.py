@@ -17,6 +17,7 @@ from .pipemind_lora_loader import PipemindLoraLoader
 from .pipemind_load_txt_file import LoadTxtFile
 from .pipemind_show_text_find import PipemindShowTextFind
 from .pipemind_enhanced_composer_node import EnhancedKeywordPromptComposer
+from .pipemind_multifile_composer_node import MultiFileKeywordPromptComposer
 
 NODE_CLASS_MAPPINGS = {
     "RandomLineFromDropdown": RandomLineFromDropdown,
@@ -38,6 +39,7 @@ NODE_CLASS_MAPPINGS = {
     "LoadTxtFile": LoadTxtFile,
     "PipemindShowTextFind": PipemindShowTextFind,
     "EnhancedKeywordPromptComposer": EnhancedKeywordPromptComposer,
+    "MultiFileKeywordPromptComposer": MultiFileKeywordPromptComposer,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -60,6 +62,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LoadTxtFile": "🧵 Load TXT File",
     "PipemindShowTextFind": "🧵 Show Text Find",
     "EnhancedKeywordPromptComposer": "🧵 Enhanced Keyword Composer",
+    "MultiFileKeywordPromptComposer": "🧵 Multi-File Keyword Composer",
 }
 
 WEB_DIRECTORY = "./web"

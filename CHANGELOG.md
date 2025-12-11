@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Multi-File Keyword Prompt Composer**
+  - New node supporting up to 5 keyword data sources
+  - Combines multiple input sources for flexible prompt composition
+  - Supports dynamic prompts {option1|option2|option3}
+  - Advanced syntax {N$$ separator $$options} for multi-selection
+  - Multi-line keyword data format support
+  - Last-wins conflict resolution for duplicate keys
+  - Comprehensive test suite with 30+ test cases
+
 - **CI/CD Infrastructure with GitHub Actions**
   - Test automation workflow (tests.yml)
     * Runs unit and smoke tests on Python 3.12
