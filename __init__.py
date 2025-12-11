@@ -9,14 +9,14 @@ from .pipemind_sdxl_aspect_ratio import PipemindSDXL15AspectRatio
 from .pipemind_qwen_aspect_ratio import PipemindQwenAspectRatio
 from .pipemind_batch_image_loader_output import BatchImageLoadOutput
 from .pipemind_batch_image_loader_input import BatchImageLoadInput
-from .pipemind_image_saver_with_caption import  PipemindSaveImageWTxt
+from .pipemind_image_saver_with_caption import PipemindSaveImageWTxt
 from .pipemind_token_counter import PipemindTokenCounter
 from .pipemind_show_text import PipemindShowText
 from .pipemind_display_any import PipemindDisplayAny
 from .pipemind_lora_loader import PipemindLoraLoader
 from .pipemind_load_txt_file import LoadTxtFile
 from .pipemind_show_text_find import PipemindShowTextFind
-from .enhanced_pipemind_composer_node import EnhancedKeywordPromptComposer
+from .pipemind_enhanced_composer_node import EnhancedKeywordPromptComposer
 
 NODE_CLASS_MAPPINGS = {
     "RandomLineFromDropdown": RandomLineFromDropdown,
