@@ -55,9 +55,11 @@ class PipemindTokenCounter:
 
         try:
             tokenizer = self.tokenizer_cache.setdefault(
-                # Pin the revision so the download is reproducible (Bandit B615)
+                # model_name comes from the fixed ENCODER_MODEL_MAPPING above, not user
+                # input; tokenizer files are config/vocab data, so pinning a commit
+                # SHA per model adds maintenance without meaningful security.
                 model_name,
-                AutoTokenizer.from_pretrained(model_name, revision="main"),
+                AutoTokenizer.from_pretrained(model_name, revision="main"),  # nosec B615
             )
             token_count = len(tokenizer.encode(text, add_special_tokens=True))
             return (token_count,)
