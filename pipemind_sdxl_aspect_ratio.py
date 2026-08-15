@@ -19,8 +19,14 @@ class PipemindSDXL15AspectRatio:
             }
         }
 
-    RETURN_TYPES = ("INT", "INT",)
-    RETURN_NAMES = ("width", "height",)
+    RETURN_TYPES = (
+        "INT",
+        "INT",
+    )
+    RETURN_NAMES = (
+        "width",
+        "height",
+    )
     FUNCTION = "select_resolution"
     CATEGORY = "Pipemind/Resolution"
 
@@ -41,4 +47,7 @@ class PipemindSDXL15AspectRatio:
             if mode == "Portrait":
                 width, height = height, width  # Swap for portrait mode
 
-        return (width, height,)
+        return (
+            width,
+            height,
+        )

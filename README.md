@@ -23,6 +23,7 @@ A focused collection of custom nodes for ComfyUI, designed for efficient workflo
 - **Lightweight**: Minimal dependencies, focused functionality
 - **Text Processing**: Advanced file reading and line selection
 - **Prompt Tools**: Flexible prompt composition and combination
+- **MiniMax H3 Prompting**: Structured prompt assembly, camera/dialogue tagging, and validation for H3 video generation
 - **Resolution Helpers**: Aspect ratio presets for Flux, SDXL, and Qwen models
 - **Image Batch Processing**: Efficient batch loading and saving
 - **Debugging Tools**: Text display and any-type visualization
@@ -99,6 +100,37 @@ https://github.com/aa-parky/pipemind-comfyui
 - Combines up to 5 prompts with custom separators
 - Clean, straightforward merging
 - Optional whitespace handling
+
+---
+
+### 🎬 MiniMax H3 Prompting
+
+Nodes for building well-structured [MiniMax H3](https://docs.comfy.org/tutorials/video/minimax/minimax-h3) audiovisual prompts in the model's preferred tagged format. The family owns the mechanical grammar (alignment lines, `[Shot N]` timestamps, `<d>[Language]` dialogue tags, camera vocabulary) so the prompt text can focus on the creative description.
+
+#### 🧵 MiniMax H3 Prompt Assembler
+**Node ID**: `PipemindH3PromptAssembler`
+- Assembles complete base-mode prompts (T2VA / I2VA / FL2VA / L2VA)
+- Generates the exact mode-specific alignment first line with the effective duration to two decimals
+- Snaps frame counts to the model's 17n+5 grid (24 fps)
+- `length` INT passthrough keeps the alignment line and the sampler duration in sync — wire it into the MiniMax H3 node's `length` input
+
+#### 🧵 MiniMax H3 Camera Move
+**Node ID**: `PipemindH3CameraMove`
+- Builds camera sentences from the model's fixed motion vocabulary (Push In, Truck Left, Arc Shot, ...)
+- Optional amplitude (small/large) and speed (slow/fast) qualifiers; defaults omit them, matching the guide
+- Output fragment feeds the prompt combiners or a `<camera>` placeholder in the Keyword Composer
+
+#### 🧵 MiniMax H3 Dialogue
+**Node ID**: `PipemindH3Dialogue`
+- Correctly tagged `<d>[Language] ...</d>` dialogue with stable `(S1)` speaker IDs and compound group IDs
+- Voiceover mode emits the required "off-screen voiceover" phrase plus the closed-lips clause
+- Supports `<cutoff>` (speech truncated by video end) and `<scenetrans>` (line crossing a cut) endings
+
+#### 🧵 MiniMax H3 Prompt Lint
+**Node ID**: `PipemindH3PromptLint`
+- Validates field structure, shot numbering, cut timestamps, dialogue tags, speaker-ID ordering, and alignment-line/duration agreement
+- Warns on description word count outside 350–500 and stray curly braces
+- `pass` BOOLEAN output pairs with 🧵 Boolean Switch (Any) to gate queuing on a valid prompt
 
 ---
 

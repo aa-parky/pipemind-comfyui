@@ -13,7 +13,7 @@ class PipemindLoraLoader:
 
     @classmethod
     def INPUT_TYPES(cls):
-        lora_list = ['None'] + folder_paths.get_filename_list("loras")
+        lora_list = ["None"] + folder_paths.get_filename_list("loras")
         return {
             "required": {
                 "model": ("MODEL",),
@@ -35,8 +35,21 @@ class PipemindLoraLoader:
     FUNCTION = "load_loras"
     CATEGORY = "Pipemind"
 
-    def load_loras(self, model, clip, lora_01, strength_01, lora_02, strength_02,
-                   lora_03, strength_03, lora_04, strength_04, lora_05, strength_05):
+    def load_loras(
+        self,
+        model,
+        clip,
+        lora_01,
+        strength_01,
+        lora_02,
+        strength_02,
+        lora_03,
+        strength_03,
+        lora_04,
+        strength_04,
+        lora_05,
+        strength_05,
+    ):
         """Load multiple LoRA files sequentially."""
 
         # Create LoraLoader instance
@@ -58,4 +71,3 @@ class PipemindLoraLoader:
                 model, clip = lora_loader.load_lora(model, clip, lora_name, strength, strength)
 
         return (model, clip)
-

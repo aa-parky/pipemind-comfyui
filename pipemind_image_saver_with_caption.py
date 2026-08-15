@@ -1,4 +1,3 @@
-
 import os
 import json
 import numpy as np
@@ -26,17 +25,26 @@ class PipemindSaveImageWTxt:
         return {
             "required": {
                 "images": ("IMAGE", {"tooltip": "The images to save."}),
-                "filename_prefix": ("STRING", {"default": "tag", "tooltip": "The prefix for the file to save."}),
-                "output_path": ("STRING", {"default": "tagger", "tooltip": "The subfolder path (optional)"}),
+                "filename_prefix": (
+                    "STRING",
+                    {"default": "tag", "tooltip": "The prefix for the file to save."},
+                ),
+                "output_path": (
+                    "STRING",
+                    {"default": "tagger", "tooltip": "The subfolder path (optional)"},
+                ),
             },
             "optional": {
-                "caption_file_extension": ("STRING",
-                                           {"default": ".txt", "tooltip": "The extension for the caption file."}),
-                "caption": ("STRING", {"forceInput": True, "tooltip": "string to save as .txt file"}),
+                "caption_file_extension": (
+                    "STRING",
+                    {"default": ".txt", "tooltip": "The extension for the caption file."},
+                ),
+                "caption": (
+                    "STRING",
+                    {"forceInput": True, "tooltip": "string to save as .txt file"},
+                ),
             },
-            "hidden": {
-                "prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"
-            },
+            "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     RETURN_TYPES = ("STRING",)
@@ -55,17 +63,25 @@ class PipemindSaveImageWTxt:
 
         count = 0
         for filename in os.listdir(path):
-            if filename.startswith(filename_prefix) and filename.endswith('.png'):
+            if filename.startswith(filename_prefix) and filename.endswith(".png"):
                 try:
                     # Extract the number from the filename
-                    number = int(filename.rsplit('_', 1)[1].split('.')[0])
+                    number = int(filename.rsplit("_", 1)[1].split(".")[0])
                     count = max(count, number + 1)
                 except (ValueError, IndexError):
                     continue
         return count
 
-    def save_images(self, images, output_path, filename_prefix="tag", prompt=None, extra_pnginfo=None, caption=None,
-                    caption_file_extension=".txt"):
+    def save_images(
+        self,
+        images,
+        output_path,
+        filename_prefix="tag",
+        prompt=None,
+        extra_pnginfo=None,
+        caption=None,
+        caption_file_extension=".txt",
+    ):
         try:
             # Handle output path
             if os.path.isabs(output_path):
@@ -84,7 +100,7 @@ class PipemindSaveImageWTxt:
 
             results = list()
             for image in images:
-                i = 255. * image.cpu().numpy()
+                i = 255.0 * image.cpu().numpy()
                 img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
 
                 # Prepare metadata
@@ -108,19 +124,17 @@ class PipemindSaveImageWTxt:
                 if caption is not None:
                     txt_file = base_file_name + caption_file_extension
                     txt_path = os.path.join(full_path, txt_file)
-                    with open(txt_path, 'w', encoding='utf-8') as f:
+                    with open(txt_path, "w", encoding="utf-8") as f:
                         f.write(caption)
 
                 print(f"Saved: {file} (counter: {counter})")
                 counter += 1
 
-                results.append({
-                    "filename": file,
-                    "subfolder": os.path.basename(full_path),
-                    "type": self.type
-                })
+                results.append(
+                    {"filename": file, "subfolder": os.path.basename(full_path), "type": self.type}
+                )
 
-            return file,
+            return (file,)
 
         except Exception as e:
             print(f"Error in save_images: {str(e)}")
@@ -128,10 +142,6 @@ class PipemindSaveImageWTxt:
 
 
 # Node mappings for ComfyUI
-NODE_CLASS_MAPPINGS = {
-    "PipemindSaveImageWTxt": PipemindSaveImageWTxt
-}
+NODE_CLASS_MAPPINGS = {"PipemindSaveImageWTxt": PipemindSaveImageWTxt}
 
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "PipemindSaveImageWTxt": "Pipemind Save Image with Text (Enhanced)"
-}
+NODE_DISPLAY_NAME_MAPPINGS = {"PipemindSaveImageWTxt": "Pipemind Save Image with Text (Enhanced)"}

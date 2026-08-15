@@ -73,7 +73,8 @@ class EnhancedKeywordPromptComposer:
             str: Processed result
         """
         # Pattern for {N$$ separator $$option1|option2|option3}
-        advanced_pattern = re.compile(r"(\d+)\$\$\s*(.+?)\s*\$\$(.+)")
+        # Keep the separator verbatim (including spaces): {2$$ and $$a|b} joins with " and "
+        advanced_pattern = re.compile(r"(\d+)\$\$(.+?)\$\$(.+)")
         match = advanced_pattern.match(options_str)
 
         if match:
@@ -92,9 +93,7 @@ class EnhancedKeywordPromptComposer:
             return random.choice(options)
         return f"{{{options_str}}}"  # Return original if parsing fails
 
-    def compose_prompt(
-        self, prompt_template: str, keyword_data: str, seed: int = -1
-    ) -> Tuple[str]:
+    def compose_prompt(self, prompt_template: str, keyword_data: str, seed: int = -1) -> Tuple[str]:
         """
         Compose a prompt by:
         1. Processing dynamic prompts {option1|option2|option3}

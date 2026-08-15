@@ -12,9 +12,7 @@ import numpy as np  # NumPy for array operations
 import torch  # PyTorch for tensor manipulation
 
 # Define paths to standard ComfyUI directories
-COMFY_INPUT_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "input")
-)
+COMFY_INPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "input"))
 
 
 def pil2tensor(image):
@@ -53,31 +51,30 @@ def list_image_directories(base_dir):
         print(f"Base directory does not exist: {base_dir}")
         return []
 
-    allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
+    allowed_extensions = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
     dirs_with_images = set()
 
     for root, dirs, files in os.walk(base_dir):
         has_images = any(
-            any(file.lower().endswith(ext) for ext in allowed_extensions)
-            for file in files
+            any(file.lower().endswith(ext) for ext in allowed_extensions) for file in files
         )
 
         if has_images:
             rel_path = os.path.relpath(root, base_dir)
-            rel_path = rel_path.replace('\\', '/')
-            if rel_path == '.':
-                rel_path = ''
+            rel_path = rel_path.replace("\\", "/")
+            if rel_path == ".":
+                rel_path = ""
 
             current_path = rel_path
             while current_path:
                 dirs_with_images.add(current_path)
                 current_path = os.path.dirname(current_path)
 
-            dirs_with_images.add('')
+            dirs_with_images.add("")
 
     result = sorted(dirs_with_images)
-    if '' in result:
-        result[result.index('')] = '[Root Input Directory]'
+    if "" in result:
+        result[result.index("")] = "[Root Input Directory]"
 
     return result
 
@@ -102,11 +99,14 @@ class BatchImageLoadInput:
             "required": {
                 "directory": (input_dirs,),
                 "mode": (["single", "sequential"],),
-                "image_index": ("INT", {
-                    "default": 0,
-                    "min": 0,
-                    "max": 1000000,
-                }),
+                "image_index": (
+                    "INT",
+                    {
+                        "default": 0,
+                        "min": 0,
+                        "max": 1000000,
+                    },
+                ),
             }
         }
 
@@ -118,7 +118,7 @@ class BatchImageLoadInput:
     def get_image_files(self, directory):
         """Get a list of valid image files from a directory or file path."""
         image_files = []
-        allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.webp'}
+        allowed_extensions = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
 
         if os.path.isfile(directory):
             if any(directory.lower().endswith(ext) for ext in allowed_extensions):
@@ -180,8 +180,8 @@ class BatchImageLoadInput:
             image = Image.open(image_path)
             image = ImageOps.exif_transpose(image)
 
-            if image.mode != 'RGB':
-                image = image.convert('RGB')
+            if image.mode != "RGB":
+                image = image.convert("RGB")
 
             tensor_image = pil2tensor(image)
 
@@ -190,6 +190,7 @@ class BatchImageLoadInput:
         except Exception as e:
             print(f"Error loading image: {e}")
             import traceback
+
             traceback.print_exc()
             return (create_empty_image(), 0, 0)
 

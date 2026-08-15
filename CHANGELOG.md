@@ -8,6 +8,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **MiniMax H3 Prompt Node Family** (4 nodes, `Pipemind/MiniMax H3` category)
+  - MiniMax H3 Prompt Assembler (`PipemindH3PromptAssembler`)
+    * Assembles complete base-mode prompts (T2VA / I2VA / FL2VA / L2VA)
+    * Generates the mode-specific alignment first line with the official
+      bracketing and the effective duration to exactly two decimals
+    * Snaps frame counts to the model's 17n+5 grid (24 fps)
+    * `length` INT passthrough keeps the alignment line and the sampler
+      duration in sync from a single widget
+  - MiniMax H3 Camera Move (`PipemindH3CameraMove`)
+    * Builds camera sentences from the model's fixed 20-term motion
+      vocabulary with optional amplitude and speed qualifiers
+  - MiniMax H3 Dialogue (`PipemindH3Dialogue`)
+    * Correctly tagged `<d>[Language] ...</d>` dialogue with stable (S1)
+      speaker IDs and compound group IDs
+    * Voiceover mode emits the required "off-screen voiceover" phrase and
+      closed-lips clause; supports `<cutoff>` and `<scenetrans>` endings
+  - MiniMax H3 Prompt Lint (`PipemindH3PromptLint`)
+    * Validates field structure, shot numbering, cut timestamps, dialogue
+      tags, speaker-ID ordering, and alignment-line/duration agreement
+    * Warns on word count outside 350-500 and stray curly braces
+    * `pass` BOOLEAN output pairs with Boolean Switch (Any) to gate queuing
+  - Shared grammar module `pipemind_h3_common.py` and a 41-test suite
+
+- **Multi-File Keyword Prompt Composer**
+  - New node supporting up to 5 keyword data sources
+  - Combines multiple input sources for flexible prompt composition
+  - Supports dynamic prompts {option1|option2|option3}
+  - Advanced syntax {N$$ separator $$options} for multi-selection
+  - Multi-line keyword data format support
+  - Last-wins conflict resolution for duplicate keys
+  - Comprehensive test suite with 30+ test cases
+
 - **CI/CD Infrastructure with GitHub Actions**
   - Test automation workflow (tests.yml)
     * Runs unit and smoke tests on Python 3.12
@@ -47,8 +79,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Development utilities (ipython, pre-commit)
 
 ### Changed
+- Package registration in `__init__.py` now imports each node module
+  individually: a missing optional dependency (e.g. torch outside ComfyUI)
+  skips that node with a console warning instead of disabling the whole pack
 - Updated README with testing section and CI badges
 - Updated CONTRIBUTING with testing and CI guidelines
+
+### Fixed
+- Advanced dynamic-prompt syntax `{N$$ sep $$a|b}` in the Multi-File and
+  Enhanced Keyword Composers now keeps the separator's surrounding spaces
+  (previously `{2$$ and $$red|yellow}` joined as `redandyellow`)
+- Test suite collection under pytest 8/9 (removed `tests/__init__.py` so the
+  repository root is no longer imported as a test package)
+- Stale tests updated to current node contracts: `BooleanSwitchAny`
+  (`switch` parameter, STRING sockets, `Pipemind/Switch` category) and
+  `RandomLineFromDropdown` (`file_name` input)
 
 ## [0.2.0] - 2025-11-24
 

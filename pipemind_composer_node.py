@@ -3,10 +3,13 @@ class KeywordPromptComposer:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "prompt_template": ("STRING", {
-                    "multiline": True,
-                    "default": "A beautiful portrait of a person wearing <clothing>."
-                }),
+                "prompt_template": (
+                    "STRING",
+                    {
+                        "multiline": True,
+                        "default": "A beautiful portrait of a person wearing <clothing>.",
+                    },
+                ),
                 "keyword_data": ("STRING", {"forceInput": True}),
             }
         }
@@ -41,4 +44,3 @@ class KeywordPromptComposer:
         composed_prompt = prompt_template.replace(placeholder, value)
 
         return (composed_prompt,)
-
