@@ -31,7 +31,7 @@ class TestRandomLineFromDropdown:
         inputs = validate_node_inputs(RandomLineFromDropdown)
 
         # Check required inputs
-        assert "text_file" in inputs["required"]
+        assert "file_name" in inputs["required"]
         assert "seed" in inputs["required"]
 
     @pytest.mark.unit
@@ -49,7 +49,7 @@ class TestRandomLineFromDropdown:
     def test_random_line_selection(self, node, sample_text_file):
         """Test that a random line is selected from file."""
         result = node.get_random_line(
-            text_file=str(sample_text_file),
+            file_name=str(sample_text_file),
             seed=42
         )
 
