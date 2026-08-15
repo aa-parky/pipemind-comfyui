@@ -223,9 +223,7 @@ class MultiFileKeywordPromptComposer:
 
         # Step 4: Replace placeholders
         if merged_keywords:
-            composed_prompt = self._replace_placeholders(
-                processed_template, merged_keywords
-            )
+            composed_prompt = self._replace_placeholders(processed_template, merged_keywords)
         else:
             composed_prompt = processed_template
 

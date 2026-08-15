@@ -86,7 +86,7 @@ def aspect_ratio_presets():
         },
         "sdxl": {
             # Add SDXL presets as needed
-        }
+        },
     }
 
 
@@ -116,13 +116,13 @@ def validate_node_structure(node_class):
         bool: True if valid, raises AssertionError otherwise
     """
     # Check required class methods
-    assert hasattr(node_class, 'INPUT_TYPES'), "Node must have INPUT_TYPES classmethod"
+    assert hasattr(node_class, "INPUT_TYPES"), "Node must have INPUT_TYPES classmethod"
     assert callable(node_class.INPUT_TYPES), "INPUT_TYPES must be callable"
 
     # Check required class attributes
-    assert hasattr(node_class, 'RETURN_TYPES'), "Node must have RETURN_TYPES"
-    assert hasattr(node_class, 'FUNCTION'), "Node must have FUNCTION"
-    assert hasattr(node_class, 'CATEGORY'), "Node must have CATEGORY"
+    assert hasattr(node_class, "RETURN_TYPES"), "Node must have RETURN_TYPES"
+    assert hasattr(node_class, "FUNCTION"), "Node must have FUNCTION"
+    assert hasattr(node_class, "CATEGORY"), "Node must have CATEGORY"
 
     # Check that FUNCTION references an actual method
     function_name = node_class.FUNCTION
@@ -144,8 +144,9 @@ def validate_node_inputs(node_class):
     inputs = node_class.INPUT_TYPES()
 
     assert isinstance(inputs, dict), "INPUT_TYPES must return a dictionary"
-    assert "required" in inputs or "optional" in inputs, \
-        "INPUT_TYPES must have 'required' or 'optional' key"
+    assert (
+        "required" in inputs or "optional" in inputs
+    ), "INPUT_TYPES must have 'required' or 'optional' key"
 
     return inputs
 
@@ -164,19 +165,18 @@ def validate_node_outputs(node_class, output):
     expected_count = len(node_class.RETURN_TYPES)
 
     assert isinstance(output, tuple), "Node output must be a tuple"
-    assert len(output) == expected_count, \
-        f"Expected {expected_count} outputs, got {len(output)}"
+    assert len(output) == expected_count, f"Expected {expected_count} outputs, got {len(output)}"
 
     return True
 
 
 # Export validation helpers
 __all__ = [
-    'sample_text_file',
-    'sample_prompt_file',
-    'aspect_ratio_presets',
-    'mock_comfyui_context',
-    'validate_node_structure',
-    'validate_node_inputs',
-    'validate_node_outputs',
+    "sample_text_file",
+    "sample_prompt_file",
+    "aspect_ratio_presets",
+    "mock_comfyui_context",
+    "validate_node_structure",
+    "validate_node_inputs",
+    "validate_node_outputs",
 ]

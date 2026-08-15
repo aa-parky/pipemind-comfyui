@@ -343,9 +343,7 @@ class TestMultiFileKeywordPromptComposer:
 
     def test_empty_template(self):
         """Test handling of empty template."""
-        result = self.node.compose_prompt(
-            prompt_template="", seed=-1, keyword_data_1="key=value"
-        )
+        result = self.node.compose_prompt(prompt_template="", seed=-1, keyword_data_1="key=value")
 
         validate_node_outputs(MultiFileKeywordPromptComposer, result)
         assert result[0] == ""

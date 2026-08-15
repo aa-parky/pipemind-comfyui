@@ -18,7 +18,7 @@ class MapPromptGenerator:
         "world": "World/Continent Map",
         "regional": "Regional/Local Area Map",
         "battle": "Battle/Encounter Map",
-        "dungeon": "Dungeon/Interior Map"
+        "dungeon": "Dungeon/Interior Map",
     }
 
     THEMES = {
@@ -29,7 +29,7 @@ class MapPromptGenerator:
         "post-apoc": "Post-Apocalyptic",
         "horror": "Horror",
         "steampunk": "Steampunk",
-        "wuxia": "Eastern/Wuxia"
+        "wuxia": "Eastern/Wuxia",
     }
 
     def __init__(self):
@@ -163,7 +163,7 @@ class MapPromptGenerator:
             elements.append(features)
 
         grid = input("Include grid? (y/n) [default: y]: ").strip().lower()
-        if grid != 'n':
+        if grid != "n":
             elements.append("square grid overlay")
 
         return elements
@@ -177,28 +177,28 @@ class MapPromptGenerator:
                 "hand-drawn on aged parchment",
                 "satellite view",
                 "fantasy atlas",
-                "antique map style"
+                "antique map style",
             ]
         elif self.map_type == "regional":
             styles = [
                 "illustrated adventure map",
                 "hand-drawn parchment",
                 "tactical overview",
-                "isometric view"
+                "isometric view",
             ]
         elif self.map_type == "battle":
             styles = [
                 "optimized for virtual tabletop",
                 "game board style",
                 "realistic terrain",
-                "miniature terrain style"
+                "miniature terrain style",
             ]
         else:  # dungeon
             styles = [
                 "classic dungeon style",
                 "detailed floor plan",
                 "isometric view",
-                "old-school RPG style"
+                "old-school RPG style",
             ]
 
         print("\nSuggested styles:")
@@ -267,24 +267,13 @@ class MapPromptGenerator:
 
         # Add quality tags
         if self.map_type == "battle":
-            parts.extend([
-                "high contrast",
-                "clear for gameplay",
-                "detailed textures",
-                "game-ready quality"
-            ])
+            parts.extend(
+                ["high contrast", "clear for gameplay", "detailed textures", "game-ready quality"]
+            )
         elif self.map_type == "dungeon":
-            parts.extend([
-                "clear and readable",
-                "detailed but functional",
-                "high quality"
-            ])
+            parts.extend(["clear and readable", "detailed but functional", "high quality"])
         else:
-            parts.extend([
-                "detailed cartography",
-                "clear and readable",
-                "high quality"
-            ])
+            parts.extend(["detailed cartography", "clear and readable", "high quality"])
 
         # Join with commas
         prompt = ", ".join(parts)
@@ -311,18 +300,18 @@ class MapPromptGenerator:
 
         prompt = self.build_prompt()
 
-        print("\n" + "="*80)
+        print("\n" + "=" * 80)
         print("GENERATED PROMPT:")
-        print("="*80)
+        print("=" * 80)
         print(prompt)
-        print("="*80)
+        print("=" * 80)
 
         return prompt
 
     def save_prompt(self, prompt: str, filename: str = "map_prompt.txt"):
         """Save the prompt to a file."""
         try:
-            with open(filename, 'w') as f:
+            with open(filename, "w") as f:
                 f.write(prompt)
             print(f"\nPrompt saved to {filename}")
         except Exception as e:
@@ -336,7 +325,7 @@ def main():
 
     # Ask if user wants to save
     save = input("\nSave prompt to file? (y/n): ").strip().lower()
-    if save == 'y':
+    if save == "y":
         filename = input("Filename [map_prompt.txt]: ").strip()
         if not filename:
             filename = "map_prompt.txt"

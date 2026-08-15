@@ -20,7 +20,6 @@ from pipemind_h3_dialogue import PipemindH3Dialogue
 from pipemind_h3_prompt_lint import PipemindH3PromptLint
 from tests.conftest import validate_node_structure, validate_node_inputs
 
-
 VALID_DESCRIPTION = (
     "[Shot 1] Live-action, cinematic, a man stands in a hallway. "
     "The camera pushes in with small amplitude at slow speed. "
@@ -33,18 +32,32 @@ class TestH3Common:
     """Duration math shared by the assembler and lint nodes."""
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("frames,expected", [
-        (5, 5), (124, 124), (125, 141), (100, 107), (260, 260), (3600, 3592),
-    ])
+    @pytest.mark.parametrize(
+        "frames,expected",
+        [
+            (5, 5),
+            (124, 124),
+            (125, 141),
+            (100, 107),
+            (260, 260),
+            (3600, 3592),
+        ],
+    )
     def test_snap_length(self, frames, expected):
         snapped = snap_length(frames)
         assert snapped == expected
         assert (snapped - 5) % 17 == 0
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("frames,expected", [
-        (124, "5.17"), (175, "7.29"), (260, "10.83"), (345, "14.38"),
-    ])
+    @pytest.mark.parametrize(
+        "frames,expected",
+        [
+            (124, "5.17"),
+            (175, "7.29"),
+            (260, "10.83"),
+            (345, "14.38"),
+        ],
+    )
     def test_duration_two_decimals(self, frames, expected):
         assert duration_seconds(frames) == expected
 
@@ -124,9 +137,7 @@ class TestPipemindH3PromptAssembler:
 
     @pytest.mark.unit
     def test_empty_music_defaults_to_na(self, node):
-        prompt, _ = node.assemble(
-            "T2VA (text only)", 124, 1, "[Shot 1] A scene.", "Wind.", ""
-        )
+        prompt, _ = node.assemble("T2VA (text only)", 124, 1, "[Shot 1] A scene.", "Wind.", "")
         assert prompt.endswith("non_diegetic_music: N/A")
 
 
@@ -143,8 +154,7 @@ class TestPipemindH3CameraMove:
     def test_full_formula(self, node):
         (sentence,) = node.build("Push In", "small", "slow", "he approaches the door")
         assert sentence == (
-            "The camera pushes in with small amplitude at slow speed "
-            "as he approaches the door."
+            "The camera pushes in with small amplitude at slow speed " "as he approaches the door."
         )
 
     @pytest.mark.unit
@@ -158,9 +168,20 @@ class TestPipemindH3CameraMove:
     @pytest.mark.unit
     def test_vocabulary_is_complete(self):
         options = PipemindH3CameraMove.INPUT_TYPES()["required"]["motion"][0]
-        for term in ["Zoom In", "Pull Out", "Pan Left", "Truck Right", "Tilt Up",
-                     "Pedestal Down", "Arc Shot", "Tracking Shot", "Static Shot",
-                     "Shake Slightly", "POV", "Roll Clockwise"]:
+        for term in [
+            "Zoom In",
+            "Pull Out",
+            "Pan Left",
+            "Truck Right",
+            "Tilt Up",
+            "Pedestal Down",
+            "Arc Shot",
+            "Tracking Shot",
+            "Static Shot",
+            "Shake Slightly",
+            "POV",
+            "Roll Clockwise",
+        ]:
             assert term in options
 
 
@@ -176,19 +197,30 @@ class TestPipemindH3Dialogue:
     @pytest.mark.unit
     def test_on_screen_line(self, node):
         (sentence,) = node.build(
-            "The older man with a low, quiet voice", 1, "says", "English",
-            "Goodbye everyone.", "on-screen", "his", "normal",
+            "The older man with a low, quiet voice",
+            1,
+            "says",
+            "English",
+            "Goodbye everyone.",
+            "on-screen",
+            "his",
+            "normal",
         )
         assert sentence == (
-            "The older man with a low, quiet voice (S1) says: "
-            "<d>[English] Goodbye everyone.</d>"
+            "The older man with a low, quiet voice (S1) says: " "<d>[English] Goodbye everyone.</d>"
         )
 
     @pytest.mark.unit
     def test_voiceover_appends_closed_lips_clause(self, node):
         (sentence,) = node.build(
-            "The man", 1, "says", "English", "I remember that road.",
-            "off-screen voiceover", "his", "normal",
+            "The man",
+            1,
+            "says",
+            "English",
+            "I remember that road.",
+            "off-screen voiceover",
+            "his",
+            "normal",
         )
         assert "says in an off-screen voiceover: <d>[English]" in sentence
         assert sentence.endswith("while his lips remain completely closed.")
@@ -196,17 +228,30 @@ class TestPipemindH3Dialogue:
     @pytest.mark.unit
     def test_cutoff_marker_without_added_period(self, node):
         (sentence,) = node.build(
-            "The signalman", 2, "shouts", "English", "she's coming round",
-            "on-screen", "his", "cutoff (video ends mid-line)",
+            "The signalman",
+            2,
+            "shouts",
+            "English",
+            "she's coming round",
+            "on-screen",
+            "his",
+            "cutoff (video ends mid-line)",
         )
         assert "<d>[English] she's coming round <cutoff></d>" in sentence
 
     @pytest.mark.unit
     def test_compound_ids_and_custom_language(self, node):
         (sentence,) = node.build(
-            "The two children", 1, "shout together", "custom",
-            "Wait for us!", "on-screen", "their", "normal",
-            custom_language="Welsh", compound_ids="S1, S2",
+            "The two children",
+            1,
+            "shout together",
+            "custom",
+            "Wait for us!",
+            "on-screen",
+            "their",
+            "normal",
+            custom_language="Welsh",
+            compound_ids="S1, S2",
         )
         assert "(S1,S2)" in sentence
         assert "<d>[Welsh] Wait for us!</d>" in sentence
@@ -214,8 +259,14 @@ class TestPipemindH3Dialogue:
     @pytest.mark.unit
     def test_terminal_punctuation_added_when_missing(self, node):
         (sentence,) = node.build(
-            "The man", 1, "says", "English", "Hello there",
-            "on-screen", "his", "normal",
+            "The man",
+            1,
+            "says",
+            "English",
+            "Hello there",
+            "on-screen",
+            "his",
+            "normal",
         )
         assert "<d>[English] Hello there.</d>" in sentence
 
@@ -226,8 +277,9 @@ class TestPipemindH3PromptLint:
         return PipemindH3PromptLint()
 
     @staticmethod
-    def make_prompt(description=VALID_DESCRIPTION, soundscape="Wind and rain.",
-                    music="N/A", first_line=""):
+    def make_prompt(
+        description=VALID_DESCRIPTION, soundscape="Wind and rain.", music="N/A", first_line=""
+    ):
         parts = [first_line] if first_line else []
         parts += [
             f"integrated_multimodal_description: {description}",
@@ -273,8 +325,7 @@ class TestPipemindH3PromptLint:
     @pytest.mark.unit
     def test_timestamps_must_increase(self, node):
         desc = (
-            "[Shot 1] A scene. [Shot 2] At 00:05.000, a cut. "
-            "[Shot 3] At 00:03.000, another cut."
+            "[Shot 1] A scene. [Shot 2] At 00:05.000, a cut. " "[Shot 3] At 00:03.000, another cut."
         )
         report, passed = node.lint(self.make_prompt(description=desc), False)
         assert not passed
@@ -314,9 +365,7 @@ class TestPipemindH3PromptLint:
             "of the target video."
         )
         desc = "[Shot 1] A scene. [Shot 2] At 00:03.000, the camera cuts to a door."
-        report, passed = node.lint(
-            self.make_prompt(description=desc, first_line=first), False, 124
-        )
+        report, passed = node.lint(self.make_prompt(description=desc, first_line=first), False, 124)
         assert passed, report
 
     @pytest.mark.unit
@@ -341,8 +390,12 @@ class TestPipemindH3PromptLint:
     def test_assembler_output_passes_lint(self, node):
         assembler = PipemindH3PromptAssembler()
         prompt, frames = assembler.assemble(
-            "FL2VA (first + last frame)", 260, 2, VALID_DESCRIPTION,
-            "Wind and rain throughout.", "N/A",
+            "FL2VA (first + last frame)",
+            260,
+            2,
+            VALID_DESCRIPTION,
+            "Wind and rain throughout.",
+            "N/A",
         )
         report, passed = node.lint(prompt, False, frames)
         assert passed, report

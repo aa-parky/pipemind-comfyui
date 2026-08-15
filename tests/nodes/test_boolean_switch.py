@@ -146,14 +146,17 @@ class TestBooleanSwitchAny:
         assert isinstance(result[0], int)
 
     @pytest.mark.unit
-    @pytest.mark.parametrize("switch,true_val,false_val", [
-        (True, "a", "b"),
-        (False, "a", "b"),
-        (True, 1, 2),
-        (False, 1, 2),
-        (True, [1, 2], [3, 4]),
-        (False, [1, 2], [3, 4]),
-    ])
+    @pytest.mark.parametrize(
+        "switch,true_val,false_val",
+        [
+            (True, "a", "b"),
+            (False, "a", "b"),
+            (True, 1, 2),
+            (False, 1, 2),
+            (True, [1, 2], [3, 4]),
+            (False, [1, 2], [3, 4]),
+        ],
+    )
     def test_switch_parametric(self, node, switch, true_val, false_val):
         """Test switching with various parameter combinations."""
         result = node.switch(on_true=true_val, on_false=false_val, switch=switch)

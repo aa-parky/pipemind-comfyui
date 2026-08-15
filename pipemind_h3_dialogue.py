@@ -91,9 +91,7 @@ class PipemindH3Dialogue:
         continues_after = line_ending == "scenetrans (line continues after a cut)"
         cutoff = line_ending == "cutoff (video ends mid-line)"
 
-        if line_ending == "normal" and words and not words.endswith(
-            (".", "!", "?", "…")
-        ):
+        if line_ending == "normal" and words and not words.endswith((".", "!", "?", "…")):
             words += "."
         if carried_over:
             words = f"<scenetrans> {words}"
@@ -114,13 +112,9 @@ class PipemindH3Dialogue:
             sentence = f"{speaker_description.strip()} ({speaker_id}) {verb}: {tagged}"
 
         if carried_over:
-            sentence += (
-                f" {pronoun.capitalize()} line carries over from the previous shot."
-            )
+            sentence += f" {pronoun.capitalize()} line carries over from the previous shot."
         elif continues_after:
-            sentence += (
-                f" {pronoun.capitalize()} line continues seamlessly across the cut."
-            )
+            sentence += f" {pronoun.capitalize()} line continues seamlessly across the cut."
 
         return (sentence,)
 

@@ -5,11 +5,10 @@ class PipemindShowTextFind:
         return {
             "required": {
                 "text": ("STRING", {"forceInput": True}),
-                "search_term": ("STRING", {
-                    "default": "",
-                    "multiline": False,
-                    "placeholder": "Enter search term..."
-                }),
+                "search_term": (
+                    "STRING",
+                    {"default": "", "multiline": False, "placeholder": "Enter search term..."},
+                ),
                 "case_sensitive": ("BOOLEAN", {"default": False}),
                 "whole_word": ("BOOLEAN", {"default": False}),
             },
@@ -20,14 +19,25 @@ class PipemindShowTextFind:
         }
 
     INPUT_IS_LIST = True
-    RETURN_TYPES = ("STRING", "STRING",)
-    RETURN_NAMES = ("text", "search_results",)
+    RETURN_TYPES = (
+        "STRING",
+        "STRING",
+    )
+    RETURN_NAMES = (
+        "text",
+        "search_results",
+    )
     FUNCTION = "show_and_find"
     OUTPUT_NODE = True
-    OUTPUT_IS_LIST = (True, True,)
+    OUTPUT_IS_LIST = (
+        True,
+        True,
+    )
     CATEGORY = "Pipemind"
 
-    def show_and_find(self, text, search_term, case_sensitive, whole_word, unique_id=None, extra_pnginfo=None):
+    def show_and_find(
+        self, text, search_term, case_sensitive, whole_word, unique_id=None, extra_pnginfo=None
+    ):
         # Debug input
         print(f"Raw text input: {repr(text)}")
         print(f"Raw search term: {repr(search_term)}")
@@ -52,7 +62,7 @@ class PipemindShowTextFind:
             return (text, ["No search term provided"])
 
         # Split text into lines
-        lines = text_to_search.split('\n')
+        lines = text_to_search.split("\n")
         search_results = []
 
         print("\nSearching through lines:")
@@ -62,9 +72,9 @@ class PipemindShowTextFind:
                 continue
 
             # Extract just the value after '=' if it exists
-            parts = line.split('=')
+            parts = line.split("=")
             if len(parts) > 1:
-                search_in = parts[1].rstrip(',').strip()
+                search_in = parts[1].rstrip(",").strip()
             else:
                 search_in = line
 

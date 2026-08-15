@@ -3,14 +3,15 @@ class PipemindMultilineTextInput:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "text": ("STRING", {
-                    "default": "{a goblin|a dwarf} tapdancing with {a wrench|a kettle}",
-                    "multiline": True,
-                    "dynamicPrompts": False
-                }),
-                "enable_dynamic": ("BOOLEAN", {
-                    "default": False
-                }),
+                "text": (
+                    "STRING",
+                    {
+                        "default": "{a goblin|a dwarf} tapdancing with {a wrench|a kettle}",
+                        "multiline": True,
+                        "dynamicPrompts": False,
+                    },
+                ),
+                "enable_dynamic": ("BOOLEAN", {"default": False}),
             }
         }
 
@@ -29,9 +30,9 @@ class PipemindMultilineTextInput:
             from random import choice
 
             def replace_match(match):
-                options = match.group(1).split('|')
+                options = match.group(1).split("|")
                 return choice(options)
 
-            text = re.sub(r'\{([^}]+)\}', replace_match, text)
+            text = re.sub(r"\{([^}]+)\}", replace_match, text)
 
         return (text,)

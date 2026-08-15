@@ -93,9 +93,7 @@ class EnhancedKeywordPromptComposer:
             return random.choice(options)
         return f"{{{options_str}}}"  # Return original if parsing fails
 
-    def compose_prompt(
-        self, prompt_template: str, keyword_data: str, seed: int = -1
-    ) -> Tuple[str]:
+    def compose_prompt(self, prompt_template: str, keyword_data: str, seed: int = -1) -> Tuple[str]:
         """
         Compose a prompt by:
         1. Processing dynamic prompts {option1|option2|option3}

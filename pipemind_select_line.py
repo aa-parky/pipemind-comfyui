@@ -17,9 +17,7 @@ import random
 from typing import List, Tuple
 
 # Locate the *input* folder two levels up from this file.
-COMFY_INPUT_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "input")
-)
+COMFY_INPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "input"))
 
 
 def list_txt_files_recursive(base_dir: str) -> List[str]:
@@ -38,13 +36,13 @@ def parse_custom_indices(indices: str) -> List[int]:
     if not indices.strip():
         return []
     out: List[int] = []
-    for part in indices.split(','):
+    for part in indices.split(","):
         part = part.strip()
         if not part:
             continue
-        if '-' in part:
+        if "-" in part:
             try:
-                lo, hi = map(int, part.split('-', 1))
+                lo, hi = map(int, part.split("-", 1))
             except ValueError:
                 continue
             if lo <= hi:
@@ -84,14 +82,16 @@ class SelectLineFromDropdown:
             "required": {
                 "enabled": ("BOOLEAN", {"default": True}),
                 "file_name": (files,),
-                "mode": ([
-                    "manual",
-                    "random",
-                    "increment",
-                    "decrement",
-                    "custom_seq",
-                    "custom_random",
-                ],),
+                "mode": (
+                    [
+                        "manual",
+                        "random",
+                        "increment",
+                        "decrement",
+                        "custom_seq",
+                        "custom_random",
+                    ],
+                ),
                 "line_index": ("INT", {"default": 0, "min": 0, "max": 1_000_000}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xFFFFFFFFFFFFFFFF}),
                 "custom_indices": ("STRING", {"default": "", "multiline": False}),

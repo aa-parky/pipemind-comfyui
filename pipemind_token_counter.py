@@ -1,11 +1,12 @@
 from transformers import AutoTokenizer
 
+
 class PipemindTokenCounter:
     # Internal model ID map
     ENCODER_MODEL_MAPPING = {
         "T5 XXL v1.1 (Google)": "google/t5-v1_1-xxl",
         "CLIP I (OpenAI)": "openai/clip-vit-base-patch16",
-        "CLIP Large (SDXL Default)": "openai/clip-vit-large-patch14"
+        "CLIP Large (SDXL Default)": "openai/clip-vit-large-patch14",
     }
 
     tokenizer_cache = {}
@@ -54,7 +55,9 @@ class PipemindTokenCounter:
 
         try:
             tokenizer = self.tokenizer_cache.setdefault(
-                model_name, AutoTokenizer.from_pretrained(model_name)
+                # Pin the revision so the download is reproducible (Bandit B615)
+                model_name,
+                AutoTokenizer.from_pretrained(model_name, revision="main"),
             )
             token_count = len(tokenizer.encode(text, add_special_tokens=True))
             return (token_count,)

@@ -79,7 +79,7 @@ class PipemindH3PromptAssembler:
         stripped = text.strip()
         prefix = f"{field}:"
         if stripped.startswith(prefix):
-            stripped = stripped[len(prefix):].strip()
+            stripped = stripped[len(prefix) :].strip()
         return stripped
 
     def assemble(

@@ -1,8 +1,6 @@
 import os
 
-COMFY_INPUT_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "input")
-)
+COMFY_INPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "input"))
 
 
 def list_txt_files_recursive(base_dir):

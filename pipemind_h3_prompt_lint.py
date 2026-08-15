@@ -119,9 +119,7 @@ class PipemindH3PromptLint:
 
         shot_numbers = [int(n) for n in re.findall(r"\[Shot (\d+)\]", shot_text)]
         if shot_numbers and shot_numbers != list(range(1, len(shot_numbers) + 1)):
-            errors.append(
-                f"shot numbers {shot_numbers} are not sequential from 1"
-            )
+            errors.append(f"shot numbers {shot_numbers} are not sequential from 1")
 
         stamps = re.findall(r"\[Shot \d+\] At (\d{2}):(\d{2})\.(\d{3})", shot_text)
         seconds = [self._timestamp_to_seconds(*s) for s in stamps]
@@ -131,8 +129,7 @@ class PipemindH3PromptLint:
         malformed = re.findall(r"\[Shot [2-9]\d*\](?!\s+At \d{2}:\d{2}\.\d{3})", shot_text)
         if malformed:
             errors.append(
-                f"{len(malformed)} shot(s) after [Shot 1] lack a valid "
-                "'At MM:SS.mmm' timestamp"
+                f"{len(malformed)} shot(s) after [Shot 1] lack a valid " "'At MM:SS.mmm' timestamp"
             )
 
         duration = None
@@ -140,9 +137,7 @@ class PipemindH3PromptLint:
             duration = length / 24.0
             late = [s for s in seconds if s >= duration]
             if late:
-                errors.append(
-                    f"timestamp(s) {late} at or beyond the {duration:.2f}s duration"
-                )
+                errors.append(f"timestamp(s) {late} at or beyond the {duration:.2f}s duration")
 
         # --- alignment line vs duration ---
         aligned = re.findall(r"aligns with the (\d+\.\d{2})-second mark", prompt)
@@ -158,9 +153,7 @@ class PipemindH3PromptLint:
         # --- dialogue blocks ---
         for block in re.findall(r"<d>(.*?)</d>", prompt, re.S):
             if not re.match(r"\[[^\]]+\]\s", block):
-                errors.append(
-                    f"<d> block missing leading [Language] tag: '{block[:40]}...'"
-                )
+                errors.append(f"<d> block missing leading [Language] tag: '{block[:40]}...'")
 
         open_d, close_d = prompt.count("<d>"), prompt.count("</d>")
         if open_d != close_d:
@@ -203,9 +196,7 @@ class PipemindH3PromptLint:
         if not errors and not warnings:
             report = "H3 prompt lint: OK - no issues found."
         else:
-            lines = [
-                f"H3 prompt lint: {len(errors)} error(s), {len(warnings)} warning(s)"
-            ]
+            lines = [f"H3 prompt lint: {len(errors)} error(s), {len(warnings)} warning(s)"]
             lines += [f"ERROR: {e}" for e in errors]
             lines += [f"WARN: {w}" for w in warnings]
             report = "\n".join(lines)

@@ -45,9 +45,7 @@ class PipemindH3CameraMove:
     FUNCTION = "build"
     CATEGORY = "Pipemind/MiniMax H3"
 
-    def build(
-        self, motion: str, amplitude: str, speed: str, action: str = ""
-    ) -> Tuple[str]:
+    def build(self, motion: str, amplitude: str, speed: str, action: str = "") -> Tuple[str]:
         sentence = H3_CAMERA_PHRASES[motion]
         if amplitude != "none":
             sentence += f" with {amplitude} amplitude"

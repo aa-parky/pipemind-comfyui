@@ -4,6 +4,7 @@ import random
 # Use ComfyUI's input folder as source for text files
 COMFY_INPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "input"))
 
+
 def list_txt_files_recursive(base_dir):
     txt_files = []
     for root, _, files in os.walk(base_dir):
@@ -13,6 +14,7 @@ def list_txt_files_recursive(base_dir):
                 rel_path = os.path.relpath(full_path, base_dir)
                 txt_files.append(rel_path)
     return sorted(txt_files)
+
 
 class RandomLineFromDropdown:
     @classmethod
@@ -24,11 +26,14 @@ class RandomLineFromDropdown:
         return {
             "required": {
                 "file_name": (txt_files,),
-                "seed": ("INT", {
-                    "default": 42,
-                    "min": 0,
-                    "max": 4294967295,  # Full 32-bit unsigned seed range
-                }),
+                "seed": (
+                    "INT",
+                    {
+                        "default": 42,
+                        "min": 0,
+                        "max": 4294967295,  # Full 32-bit unsigned seed range
+                    },
+                ),
             }
         }
 
