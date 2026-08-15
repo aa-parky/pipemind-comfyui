@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-15
+
 ### Added
 - **MiniMax H3 Prompt Node Family** (4 nodes, `Pipemind/MiniMax H3` category)
   - MiniMax H3 Prompt Assembler (`PipemindH3PromptAssembler`)
@@ -180,7 +182,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.1.9...v0.2.0
 [0.1.9]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.1.8...v0.1.9
 [0.1.8]: https://github.com/aa-parky/pipemind-comfyui/compare/v0.1.7...v0.1.8
