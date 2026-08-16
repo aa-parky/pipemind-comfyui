@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **MiniMax H3 usage guide** in the README (`Using the MiniMax H3 Nodes`)
+  - Annotated screenshots of all four H3 nodes with widget/output reference
+    tables, in `docs/images/`
+  - A complete worked two-shot, two-speaker FL2VA workflow: graph diagram,
+    full connection table, node settings, and real assembler/lint output
+  - Mode reference table and a summary of the mistakes each node prevents
+
 ## [0.3.0] - 2026-08-15
 
 ### Added

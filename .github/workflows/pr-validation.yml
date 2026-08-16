@@ -135,8 +135,10 @@ jobs:
     - name: Calculate PR size
       run: |
         # Get stats
-        ADDITIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= insertion)')
-        DELETIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= deletion)')
+        # `|| true` keeps `bash -e` from killing the step: grep exits 1 on an
+        # additions-only or deletions-only PR, where one of these is absent.
+        ADDITIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= insertion)' || true)
+        DELETIONS=$(git diff --shortstat origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -oP '\d+(?= deletion)' || true)
         FILES_CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | wc -l)
 
         # Default to 0 if empty
