@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Media Metadata Reader** (`PipemindMediaMetadata`, `Pipemind` category)
+  * Reads the generation metadata embedded in an image or video and renders it
+    on the node as a formatted report: model, seed, steps, cfg, sampler,
+    scheduler, denoise, size, LoRAs and both prompts
+  * File dropdown covering ComfyUI's `input/` and `output/` folders newest
+    first, plus a `path_override` widget for files anywhere else
+  * `summary` / `full` / `raw json` detail levels
+  * 13 typed outputs (report, prompts, seed, steps, cfg, sampler, scheduler,
+    model, width, height, raw JSON, `has_metadata`) so a past render's settings
+    can be wired back into a workflow
+  * Sources: PNG text chunks, EXIF (JPEG/WebP/TIFF), and video container tags
+    read with `ffprobe`, with a byte-scan fallback when `ffprobe` is absent
+  * Understands ComfyUI API prompt graphs, ComfyUI UI workflows and A1111
+    parameter strings; traces prompts through conditioning chains and collects
+    settings from split Flux-style sampler graphs
+  * Reports missing metadata plainly instead of failing
 - **MiniMax H3 usage guide** in the README (`Using the MiniMax H3 Nodes`)
   - Annotated screenshots of all four H3 nodes with widget/output reference
     tables, in `docs/images/`

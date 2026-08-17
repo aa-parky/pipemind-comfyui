@@ -33,6 +33,7 @@ _NODE_SPECS = [
     ("pipemind_lora_loader", "PipemindLoraLoader", "🧵 LoRA Loader"),
     ("pipemind_load_txt_file", "LoadTxtFile", "🧵 Load TXT File"),
     ("pipemind_show_text_find", "PipemindShowTextFind", "🧵 Show Text Find"),
+    ("pipemind_media_metadata", "PipemindMediaMetadata", "🧵 Media Metadata Reader"),
     (
         "pipemind_enhanced_composer_node",
         "EnhancedKeywordPromptComposer",

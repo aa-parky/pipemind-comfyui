@@ -13,6 +13,7 @@ A focused collection of custom nodes for ComfyUI, designed for efficient workflo
 - [Features](#features)
 - [Installation](#installation)
 - [Node Categories](#node-categories)
+- [Using the Media Metadata Reader](#-using-the-media-metadata-reader)
 - [Using the MiniMax H3 Nodes](#-using-the-minimax-h3-nodes)
 - [Requirements](#requirements)
 - [Testing](#testing)
@@ -27,7 +28,7 @@ A focused collection of custom nodes for ComfyUI, designed for efficient workflo
 - **MiniMax H3 Prompting**: Structured prompt assembly, camera/dialogue tagging, and validation for H3 video generation
 - **Resolution Helpers**: Aspect ratio presets for Flux, SDXL, and Qwen models
 - **Image Batch Processing**: Efficient batch loading and saving
-- **Debugging Tools**: Text display and any-type visualization
+- **Debugging Tools**: Text display, any-type visualization, and metadata inspection for saved images and videos
 - **Utilities**: Boolean switches, token counters, LoRA loading
 
 ## 🚀 Installation
@@ -201,6 +202,13 @@ Nodes for building well-structured [MiniMax H3](https://docs.comfy.org/tutorials
 - Universal debugging node
 - Automatic type detection and formatting
 
+#### 🧵 Media Metadata Reader
+**Node ID**: `PipemindMediaMetadata`
+- Reads the generation metadata embedded in a saved image or video
+- Shows seed, steps, cfg, sampler, scheduler, model, LoRAs and both prompts as a formatted report
+- Also exposes every field as a typed output, so settings can be reused in a workflow
+- See [Using the Media Metadata Reader](#-using-the-media-metadata-reader)
+
 ---
 
 ### 🛠️ Utilities
@@ -222,6 +230,94 @@ Nodes for building well-structured [MiniMax H3](https://docs.comfy.org/tutorials
 - Load LoRA models into your workflow
 - Standard LoRA loading interface
 - Compatible with ComfyUI model management
+
+---
+
+## 🔎 Using the Media Metadata Reader
+
+ComfyUI stamps the full workflow into every image it saves, and (via
+VideoHelperSuite or the built-in video savers) into videos too. The Media
+Metadata Reader digs that back out and shows you what actually produced a file —
+useful when you find a render from three weeks ago and want to know the seed.
+
+### Picking a file
+
+| Widget | What it does |
+|---|---|
+| `file` | Dropdown of media in ComfyUI's `input/` and `output/` folders, **newest first**. Entries are prefixed `input/…` or `output/…`, so both trees are addressable from one list. Capped at 500 entries. |
+| `detail` | `summary` — the key settings. `full` — adds the node inventory and metadata keys. `raw json` — the embedded metadata verbatim. |
+| `path_override` | Optional. An absolute or relative path to read instead of the dropdown selection — this is how you inspect a file that lives outside ComfyUI's folders. |
+
+The report is drawn on the node itself, so on its own the node is a complete
+tool: drop it in, pick a file, hit Run.
+
+### Example report
+
+```
+🧵 Pipemind Media Metadata
+==============================================================
+File        : output/ComfyUI_00042_.png
+Media       : PNG · 768 × 1024 · 1.4 MB
+Metadata    : ComfyUI prompt graph (23 nodes)
+
+── Generation ────────────────────────────────────────────────
+Model       : dreamshaper_8.safetensors
+Seed        : 987654321
+Steps       : 28
+CFG         : 7.5
+Sampler     : dpmpp_2m / karras
+Denoise     : 1.0
+Size        : 768 × 1024 (batch 2)
+
+── LoRAs ─────────────────────────────────────────────────────
+1. film_grain.safetensors   [0.75 / 0.6]
+
+── Positive prompt ───────────────────────────────────────────
+a windswept moor at dusk
+
+── Negative prompt ───────────────────────────────────────────
+blurry, watermark
+```
+
+### Outputs
+
+Every field is also available as a typed output, so you can wire a past render's
+settings straight back into a new one — feed `seed` into a KSampler to reproduce
+an image, or `positive` into a composer to riff on an old prompt.
+
+| Output | Type | Notes |
+|---|---|---|
+| `report` | STRING | The formatted text above |
+| `positive` / `negative` | STRING | Prompt text, traced back through the conditioning chain |
+| `seed` / `steps` | INT | `0` when not found |
+| `cfg` | FLOAT | `0.0` when not found |
+| `sampler` / `scheduler` | STRING | e.g. `dpmpp_2m`, `karras` |
+| `model` | STRING | Checkpoint or UNet filename |
+| `width` / `height` | INT | Latent dimensions from the graph |
+| `raw_json` | STRING | Every metadata blob found, pretty-printed |
+| `has_metadata` | BOOLEAN | `False` for files with nothing embedded — pair it with a Boolean Switch |
+
+### What it can read
+
+| Format | Source |
+|---|---|
+| PNG | `tEXt`/`iTXt` chunks — ComfyUI's `prompt` and `workflow`, or an A1111 `parameters` string |
+| JPEG / WebP / TIFF | EXIF, including ComfyUI's `prompt:{…}` tags and A1111's `UserComment` |
+| MP4 / WebM / MKV / MOV | Container tags via `ffprobe`, with a byte-scan fallback when `ffprobe` isn't installed |
+
+The reader understands three metadata dialects: ComfyUI API prompt graphs
+(the normal case), ComfyUI UI workflows (when only `workflow` was embedded), and
+A1111-style parameter strings. Modern split-sampler graphs are handled too — for
+a Flux-style `RandomNoise` + `BasicScheduler` + `SamplerCustomAdvanced` setup it
+walks upstream from the sampler to collect the settings scattered across those
+nodes.
+
+**When nothing is found**, the node says so plainly rather than failing. Images
+that have been re-saved, converted, screenshotted, or run through most social
+platforms have had their metadata stripped.
+
+> `ffprobe` (part of FFmpeg) is optional. Without it, videos fall back to a
+> byte scan that still recovers metadata from most VideoHelperSuite renders.
 
 ---
 
